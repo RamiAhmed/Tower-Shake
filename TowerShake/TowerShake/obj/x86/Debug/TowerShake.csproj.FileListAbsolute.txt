@@ -1,0 +1,10 @@
+c:\users\rami ahmed bock\documents\visual studio 2010\Projects\TowerShake\TowerShake\TowerShake\obj\x86\Debug\ResolveAssemblyReference.cache
+c:\users\rami ahmed bock\documents\visual studio 2010\Projects\TowerShake\TowerShake\TowerShake\obj\x86\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt
+c:\users\rami ahmed bock\documents\visual studio 2010\Projects\TowerShake\TowerShake\TowerShake\bin\x86\Debug\TowerShake.exe
+c:\users\rami ahmed bock\documents\visual studio 2010\Projects\TowerShake\TowerShake\TowerShake\bin\x86\Debug\TowerShake.pdb
+c:\users\rami ahmed bock\documents\visual studio 2010\Projects\TowerShake\TowerShake\TowerShake\obj\x86\Debug\TowerShake.exe
+c:\users\rami ahmed bock\documents\visual studio 2010\Projects\TowerShake\TowerShake\TowerShake\obj\x86\Debug\TowerShake.pdb
+C:\Users\Rami Ahmed Bock\documents\visual studio 2010\Projects\TowerShake\TowerShake\TowerShake\bin\x86\Debug\Content\graphics\background.xnb
+C:\Users\Rami Ahmed Bock\documents\visual studio 2010\Projects\TowerShake\TowerShake\TowerShake\bin\x86\Debug\Content\graphics\GameFont.xnb
+C:\Users\Rami Ahmed Bock\documents\visual studio 2010\Projects\TowerShake\TowerShake\TowerShake\bin\x86\Debug\Content\graphics\critter1.xnb
+C:\Users\Rami Ahmed Bock\documents\visual studio 2010\Projects\TowerShake\TowerShake\TowerShake\bin\x86\Debug\Content\graphics\mouse.xnb

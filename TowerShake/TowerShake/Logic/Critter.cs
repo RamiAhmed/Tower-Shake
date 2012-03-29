@@ -143,11 +143,14 @@ namespace TowerShake.Logic
         private void updateDrawWave(SpriteBatch batch)
         {
             moveCritters();
-            foreach (Critter critter in critters)
+            if (critters.Count > 0)
             {
-                batch.Begin(SpriteSortMode.BackToFront, BlendState.NonPremultiplied);
-                batch.Draw(critter.Texture, new Vector2(critter.X, critter.Y), critter.CritterColor);
-                batch.End();
+                foreach (Critter critter in critters)
+                {
+                    batch.Begin(SpriteSortMode.BackToFront, BlendState.NonPremultiplied);
+                    batch.Draw(critter.Texture, new Vector2(critter.X, critter.Y), critter.CritterColor);
+                    batch.End();
+                }
             }
         }
 

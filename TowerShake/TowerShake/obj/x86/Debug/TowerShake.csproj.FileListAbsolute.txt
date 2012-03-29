@@ -8,3 +8,6 @@ C:\Users\Rami Ahmed Bock\documents\visual studio 2010\Projects\TowerShake\TowerS
 C:\Users\Rami Ahmed Bock\documents\visual studio 2010\Projects\TowerShake\TowerShake\TowerShake\bin\x86\Debug\Content\graphics\GameFont.xnb
 C:\Users\Rami Ahmed Bock\documents\visual studio 2010\Projects\TowerShake\TowerShake\TowerShake\bin\x86\Debug\Content\graphics\critter1.xnb
 C:\Users\Rami Ahmed Bock\documents\visual studio 2010\Projects\TowerShake\TowerShake\TowerShake\bin\x86\Debug\Content\graphics\mouse.xnb
+C:\Users\Rami Ahmed Bock\documents\visual studio 2010\Projects\TowerShake\TowerShake\TowerShake\bin\x86\Debug\Content\graphics\ranged_tower.xnb
+C:\Users\Rami Ahmed Bock\documents\visual studio 2010\Projects\TowerShake\TowerShake\TowerShake\bin\x86\Debug\Content\graphics\slow_tower.xnb
+C:\Users\Rami Ahmed Bock\documents\visual studio 2010\Projects\TowerShake\TowerShake\TowerShake\bin\x86\Debug\Content\graphics\melee_tower.xnb

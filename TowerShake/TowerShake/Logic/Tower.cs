@@ -20,9 +20,11 @@ namespace TowerShake.Logic
     {
         // Public variables
         public static int towerWidth = 15;
+        public static ArrayList towers = new ArrayList();
+
+        // Protected variables
 
         // Private variables
-        public static ArrayList towers = new ArrayList();
         private LogicController _logic;
         private int _cost,
                     _range,
@@ -30,6 +32,7 @@ namespace TowerShake.Logic
                     _attack_speed,
                     _x, _y;
         private float _accuracy;
+        private Texture2D _towerTexture;
 
         public Tower(LogicController parentClass)
         {
@@ -46,6 +49,20 @@ namespace TowerShake.Logic
 
         private void init()
         {
+
+        }
+
+        public void updateTowers(SpriteBatch batch)
+        {
+            if (towers.Count > 0)
+            {
+                foreach (Tower tower in towers)
+                {
+                    batch.Begin(SpriteSortMode.BackToFront, BlendState.NonPremultiplied);
+                    batch.Draw(tower.Texture, new Vector2(tower.X, tower.Y), Color.White);
+                    batch.End();
+                }
+            }
 
         }
 
@@ -192,6 +209,12 @@ namespace TowerShake.Logic
         {
             set { _attack_speed = value; }
             get { return _attack_speed; }
+        }
+
+        protected Texture2D Texture
+        {
+            set { _towerTexture = value; }
+            get { return _towerTexture; }
         }
 
     }

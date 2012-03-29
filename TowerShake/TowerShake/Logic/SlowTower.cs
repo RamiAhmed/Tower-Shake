@@ -14,6 +14,7 @@ namespace TowerShake.Logic
             this.Cost = 30;
             this.Damage = 5;
             this.Range = 25;
+            this.Texture = Presentation.PresentationController.slow_tower;
         }
     }
 }

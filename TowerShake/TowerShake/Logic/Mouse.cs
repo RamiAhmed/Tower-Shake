@@ -29,6 +29,8 @@ namespace TowerShake.Logic
            //_logicController = parentClass;
 
             Console.WriteLine("Mouse instantiated");
+
+            init();
         }
 
         private void init()
@@ -68,25 +70,30 @@ namespace TowerShake.Logic
 
         private void mouseLeftButton()
         {
+            Console.WriteLine("Left mouse button clicked");
             int mouseX = currentMouse.X,
-                mouseY = currentMouse.Y;
+                mouseY = currentMouse.Y,
+                sensitivity = 100;
             Vector2 mouseVector = new Vector2(mouseX, mouseY);
 
-            if (isApproximatelyEqual(mouseVector, leftButton))
+            if (isApproximatelyEqual(mouseVector, leftButton, sensitivity))
             {
                 // left button clicked
+                Console.WriteLine("Melee Tower button clicked");
                 Tower.buy(TowerType.MeleeTower, mouseX, mouseY);
             }
-            
-            else if (isApproximatelyEqual(mouseVector, midButton))
+
+            else if (isApproximatelyEqual(mouseVector, midButton, sensitivity))
             {
                 // mid button clicked
+                Console.WriteLine("Ranged Tower button clicked");
                 Tower.buy(TowerType.RangedTower, mouseX, mouseY);
             }
 
-            else if (isApproximatelyEqual(mouseVector, rightButton))
+            else if (isApproximatelyEqual(mouseVector, rightButton, sensitivity))
             {
                 // right button clicked
+                Console.WriteLine("Slow Tower button clicked");
                 Tower.buy(TowerType.SlowTower, mouseX, mouseY);
             }
 
@@ -96,35 +103,25 @@ namespace TowerShake.Logic
         private void mouseRightButton()
         {
             // Right mouse button clicked
-        }
-
-        private bool isApproximatelyEqual(Vector2 one, Vector2 two)
-        {
-            bool equal = false;
-
-            int xDiff = (int)two.X - (int)one.X,
-                yDiff = (int)two.Y - (int)one.Y;
-
-            if (Math.Abs(xDiff) < 50 && Math.Abs(yDiff) < 50)
-            {
-                equal = true;
-            }
-
-            return equal;
+            Console.WriteLine("Right mouse button clicked");
         }
 
         private bool isApproximatelyEqual(Vector2 one, Vector2 two, int sensitivity)
         {
             bool equal = false;
 
-            int xDiff = (int)two.X - (int)one.X,
-                yDiff = (int)two.Y - (int)one.Y;
-
-            if (Math.Abs(xDiff) < sensitivity && Math.Abs(yDiff) < sensitivity)
+           // Console.WriteLine("xDiff (|" + xDiff.ToString() + "|) < " + sensitivity.ToString() +
+           //              " && yDiff (|" + yDiff.ToString() + "|) < " + sensitivity.ToString());
+            Console.WriteLine(" X1:" + one.X.ToString() + " - X2:" + two.X.ToString() + " = " + (one.X - two.X).ToString());
+            if (Math.Abs(one.X - two.X) < 100)
             {
-                equal = true;
-            }
+                if (Math.Abs(one.Y - two.Y) < 100)
+                {
+                    equal = true;
+                }
 
+            }
+            Console.WriteLine("equal = " + equal.ToString());
             return equal;
         }
 

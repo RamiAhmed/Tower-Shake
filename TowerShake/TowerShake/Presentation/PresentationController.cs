@@ -23,6 +23,9 @@ namespace TowerShake.Presentation
         // Static public variables
         public static Texture2D mouse;
         public static Texture2D critter_circle;
+        public static Texture2D ranged_tower;
+        public static Texture2D slow_tower;
+        public static Texture2D melee_tower;
 
         // Private variables
         private Game _gameClass;
@@ -54,6 +57,10 @@ namespace TowerShake.Presentation
             critter_circle = _gameClass.Content.Load<Texture2D>("critter1");
             mouse = _gameClass.Content.Load<Texture2D>("mouse");
 
+            ranged_tower = _gameClass.Content.Load<Texture2D>("ranged_tower");
+            slow_tower = _gameClass.Content.Load<Texture2D>("slow_tower");
+            melee_tower = _gameClass.Content.Load<Texture2D>("melee_tower");
+
             gameFont = _gameClass.Content.Load<SpriteFont>("GameFont");
 
             base.LoadContent();
@@ -74,10 +81,10 @@ namespace TowerShake.Presentation
 
             spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
             spriteBatch.Draw(bg, new Rectangle(0, 0, width, height), Color.White);
-            /*spriteBatch.End();
+            spriteBatch.End();
 
             spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
-            */
+            
             spriteBatch.DrawString(gameFont, getGameTime(), gameClockVector, Color.Black);
             spriteBatch.DrawString(gameFont, lives.ToString(), gameLivesVector, Color.Black);
             spriteBatch.DrawString(gameFont, gold.ToString(), gameGoldVector, Color.Black);
@@ -91,7 +98,11 @@ namespace TowerShake.Presentation
         protected override void UnloadContent()
         {
             critter_circle.Dispose();
-            
+
+            ranged_tower.Dispose();
+            slow_tower.Dispose();
+            //melee_tower.Dispose();               
+
             bg.Dispose();
         }
 

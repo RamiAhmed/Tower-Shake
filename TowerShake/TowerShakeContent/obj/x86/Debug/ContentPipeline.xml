@@ -8,7 +8,7 @@
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
       <Output>C:\Users\Rami Ahmed Bock\documents\visual studio 2010\Projects\TowerShake\TowerShake\TowerShake\bin\x86\Debug\Content\graphics\background.xnb</Output>
-      <Time>2012-03-20T14:32:00.8735387+01:00</Time>
+      <Time>2012-03-29T21:13:28.1634136+02:00</Time>
     </Item>
     <Item>
       <Source>graphics\GameFont.spritefont</Source>
@@ -36,6 +36,33 @@
       <Options>None</Options>
       <Output>C:\Users\Rami Ahmed Bock\documents\visual studio 2010\Projects\TowerShake\TowerShake\TowerShake\bin\x86\Debug\Content\graphics\mouse.xnb</Output>
       <Time>2012-03-22T19:46:08.8438671+01:00</Time>
+    </Item>
+    <Item>
+      <Source>graphics\ranged_tower.png</Source>
+      <Name>graphics\ranged_tower</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\Rami Ahmed Bock\documents\visual studio 2010\Projects\TowerShake\TowerShake\TowerShake\bin\x86\Debug\Content\graphics\ranged_tower.xnb</Output>
+      <Time>2012-03-29T21:53:06.4471749+02:00</Time>
+    </Item>
+    <Item>
+      <Source>graphics\slow_tower.png</Source>
+      <Name>graphics\slow_tower</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\Rami Ahmed Bock\documents\visual studio 2010\Projects\TowerShake\TowerShake\TowerShake\bin\x86\Debug\Content\graphics\slow_tower.xnb</Output>
+      <Time>2012-03-29T21:53:06.4471749+02:00</Time>
+    </Item>
+    <Item>
+      <Source>graphics\melee_tower.jpg</Source>
+      <Name>graphics\melee_tower</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\Rami Ahmed Bock\documents\visual studio 2010\Projects\TowerShake\TowerShake\TowerShake\bin\x86\Debug\Content\graphics\melee_tower.xnb</Output>
+      <Time>2012-03-29T22:28:21.6772038+02:00</Time>
     </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>

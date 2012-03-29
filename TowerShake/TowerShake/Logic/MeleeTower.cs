@@ -13,7 +13,8 @@ namespace TowerShake.Logic
             this.AttackSpeed = 10;
             this.Cost = 20;
             this.Damage = 15;
-            this.Range = 5;           
+            this.Range = 5;
+            this.Texture = Presentation.PresentationController.melee_tower;
         }
     }
 }

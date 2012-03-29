@@ -59,6 +59,7 @@ namespace TowerShake.Logic
         {
             SpriteBatch spriteBatch = (SpriteBatch)Game.Services.GetService(typeof(SpriteBatch));
 
+            _tower.updateTowers(spriteBatch);
             _critter.updateCritters(spriteBatch);
             _mouse.drawMouse(spriteBatch);
 

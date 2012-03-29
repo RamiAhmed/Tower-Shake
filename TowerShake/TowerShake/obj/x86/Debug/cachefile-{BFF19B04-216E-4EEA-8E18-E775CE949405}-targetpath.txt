@@ -2,3 +2,6 @@ Content\graphics\background.xnb
 Content\graphics\GameFont.xnb
 Content\graphics\critter1.xnb
 Content\graphics\mouse.xnb
+Content\graphics\ranged_tower.xnb
+Content\graphics\slow_tower.xnb
+Content\graphics\melee_tower.xnb

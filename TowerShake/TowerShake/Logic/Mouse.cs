@@ -22,6 +22,7 @@ namespace TowerShake.Logic
                            previousMouse;
         private int _x, _y;
         private Vector2 leftButton, midButton, rightButton;
+        private Tower _currentTower;
        // private LogicController _logicController;
 
         public Mouse()
@@ -66,38 +67,54 @@ namespace TowerShake.Logic
             batch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
             batch.Draw(Presentation.PresentationController.mouse, new Rectangle(this.X, this.Y, 35, 20), Color.White);
             batch.End();
+
+            updateTower();
+        }
+
+        private void updateTower()
+        {
+            Tower _tower = this.CurrentTower;
+            if (_tower != null)
+            {
+                _tower.X = this.X;
+                _tower.Y = this.Y;
+            }
         }
 
         private void mouseLeftButton()
         {
             Console.WriteLine("Left mouse button clicked");
-            int mouseX = currentMouse.X,
-                mouseY = currentMouse.Y,
-                sensitivity = 100;
-            Vector2 mouseVector = new Vector2(mouseX, mouseY);
+            int sensitivity = 100;
+            Vector2 mouseVector = new Vector2(this.X, this.Y);
+
+            if (Tower.placingTower && this.CurrentTower != null)
+            {
+                Tower.build(this.CurrentTower, this.X, this.Y);
+                this.CurrentTower = null;
+            }
 
             if (isApproximatelyEqual(mouseVector, leftButton, sensitivity))
             {
                 // left button clicked
-                Console.WriteLine("Melee Tower button clicked");
-                Tower.buy(TowerType.MeleeTower, mouseX, mouseY);
+                Console.WriteLine("Ranged Tower button clicked");
+                this.CurrentTower = Tower.buy(TowerType.RangedTower);
             }
 
             else if (isApproximatelyEqual(mouseVector, midButton, sensitivity))
             {
                 // mid button clicked
-                Console.WriteLine("Ranged Tower button clicked");
-                Tower.buy(TowerType.RangedTower, mouseX, mouseY);
+                Console.WriteLine("Melee Tower button clicked");
+                this.CurrentTower = Tower.buy(TowerType.MeleeTower);
             }
 
             else if (isApproximatelyEqual(mouseVector, rightButton, sensitivity))
             {
                 // right button clicked
-                Console.WriteLine("Slow Tower button clicked");
-                Tower.buy(TowerType.SlowTower, mouseX, mouseY);
+                Console.WriteLine("Slow Tower button clicked"); 
+                this.CurrentTower = Tower.buy(TowerType.SlowTower);
             }
 
-            Console.WriteLine("MouseX : " + mouseX.ToString() + ", MouseY: " + mouseY.ToString());
+            Console.WriteLine("MouseX : " + this.X.ToString() + ", MouseY: " + this.Y.ToString());
         }
 
         private void mouseRightButton()
@@ -112,16 +129,16 @@ namespace TowerShake.Logic
 
            // Console.WriteLine("xDiff (|" + xDiff.ToString() + "|) < " + sensitivity.ToString() +
            //              " && yDiff (|" + yDiff.ToString() + "|) < " + sensitivity.ToString());
-            Console.WriteLine(" X1:" + one.X.ToString() + " - X2:" + two.X.ToString() + " = " + (one.X - two.X).ToString());
-            if (Math.Abs(one.X - two.X) < 100)
+            //Console.WriteLine(" X1:" + one.X.ToString() + " - X2:" + two.X.ToString() + " = " + (one.X - two.X).ToString());
+            if (Math.Abs(one.X - two.X) < sensitivity)
             {
-                if (Math.Abs(one.Y - two.Y) < 100)
+                if (Math.Abs(one.Y - two.Y) < sensitivity)
                 {
                     equal = true;
                 }
 
             }
-            Console.WriteLine("equal = " + equal.ToString());
+            //Console.WriteLine("equal = " + equal.ToString());
             return equal;
         }
 
@@ -135,6 +152,12 @@ namespace TowerShake.Logic
         {
             set { _y = value; }
             get { return _y; }
+        }
+
+        public Tower CurrentTower
+        {
+            set { _currentTower = value; }
+            get { return _currentTower; }
         }
 
     }

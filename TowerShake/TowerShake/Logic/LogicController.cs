@@ -18,14 +18,14 @@ namespace TowerShake.Logic
         // Public variables
         public static int totalGameTimeMinutes = 0;
         public static int totalGameTimeSeconds = 0;
+        public static long timeMilliSeconds = 0;
         public int lastWave = 0;
 
         // Private variables
         private Player _player;
         private Critter _critter;
         private Tower _tower;
-        private Logic.Mouse _mouse;
-        private long _timeMilliSeconds = 0;
+        private Logic.Mouse _mouse;        
         //private Game _game;
 
         public LogicController(Game game) 
@@ -68,10 +68,10 @@ namespace TowerShake.Logic
 
         private void updateGameClock(GameTime gameTime)
         {
-            _timeMilliSeconds += (long)gameTime.ElapsedGameTime.TotalMilliseconds;
-            if (_timeMilliSeconds >= 1000)
+            timeMilliSeconds += (long)gameTime.ElapsedGameTime.TotalMilliseconds;
+            if (timeMilliSeconds >= 1000)
             {
-                _timeMilliSeconds = 0;
+                timeMilliSeconds = 0;
 
                 totalGameTimeSeconds += 1;
 

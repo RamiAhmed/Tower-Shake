@@ -19,7 +19,7 @@ namespace TowerShake.Logic
     class Critter
     {
         // Public variables
-        public ArrayList critters = new ArrayList();
+        public static ArrayList critters = new ArrayList();
         public int level = 0;
 
         // Private variables
@@ -197,9 +197,19 @@ namespace TowerShake.Logic
             }
         }
 
+        public void damageCritter(Critter critter, int damage)
+        {
+            critter.HP -= damage;
+            Console.WriteLine("critter " + critter.ToString() + " receives " + damage.ToString() + " damage");
+            if (critter.HP <= 0)
+            {
+                die(critter);
+            }
+        }
+
         private void die(Critter critter)
         {
-            Console.WriteLine("killing critter");
+            Console.WriteLine("killing critter: " + critter.ToString());
             critters.Remove(critter);
             critter = null;
             _logicClass.saveWaveTime();
@@ -228,7 +238,7 @@ namespace TowerShake.Logic
             get { return _y; }
         }
 
-        protected int HP
+        public int HP
         {
             set {_hp = value; }
             get { return _hp; }

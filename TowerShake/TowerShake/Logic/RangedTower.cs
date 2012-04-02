@@ -10,10 +10,10 @@ namespace TowerShake.Logic
         public RangedTower()
         {
             this.Accuracy = 0.5f;
-            this.AttackSpeed = 5;
+            this.ReloadSpeed = 1.0f;
             this.Cost = 25;
             this.Damage = 10;
-            this.Range = 50;
+            this.Range = 100;
             this.Texture = Presentation.PresentationController.ranged_tower;
         }
     }

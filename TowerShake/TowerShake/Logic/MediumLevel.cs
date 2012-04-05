@@ -22,6 +22,7 @@ namespace TowerShake.Logic
             this.HP = 50;
             this.Speed = 5;
             this.Dexterity = 0.6f;
+            this.Points = 6;
         }
     }
 }

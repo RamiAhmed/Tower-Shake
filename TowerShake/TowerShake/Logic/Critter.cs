@@ -19,16 +19,19 @@ namespace TowerShake.Logic
     class Critter
     {
         // Public variables
-        public static ArrayList critters = new ArrayList();
+        //public static ArrayList critters = new ArrayList();
+        public static List<Critter> critters = new List<Critter>();
         public int level = 0;
 
         // Private variables
        // private Vector2 critterVector;
+        private List<Critter> oldCritters = new List<Critter>();
         private LogicController _logicClass;
-        private int _x, _y, _hp, _speed;
+        private int _x, _y, _hp, _speed, _points;
         private float _dexterity;
         private Texture2D _texture;
         private Color _color;
+        private Boolean _dead;
         private int critterStartX = 72,
                     critterStartY = 40;
         private CritterType crittersLevel;
@@ -45,6 +48,8 @@ namespace TowerShake.Logic
 
         private void updateCritterState()
         {
+            level++; 
+
             if (level < 10)
             {
                 crittersLevel = CritterType.LowLevel;
@@ -114,6 +119,7 @@ namespace TowerShake.Logic
                             // Critters have reached "The City" - Player lost a life
                             Player.lives--;
                             die(critter);
+                            break;
                         }
                     }
                 }
@@ -134,22 +140,37 @@ namespace TowerShake.Logic
                     createWave(batch);
                     updateCritterState();
                     _logicClass.saveWaveTime();
-                }
+                } 
             }
-       
+
             updateDrawWave(batch);
         }
 
         private void updateDrawWave(SpriteBatch batch)
         {
-            moveCritters();
             if (critters.Count > 0)
             {
-                foreach (Critter critter in critters)
+                moveCritters();
+
+                //foreach (Critter critter in critters)
+                int crittersLength = critters.Count;
+                for (int i = 0; i < crittersLength; i++)
                 {
-                    batch.Begin(SpriteSortMode.BackToFront, BlendState.NonPremultiplied);
-                    batch.Draw(critter.Texture, new Vector2(critter.X, critter.Y), critter.CritterColor);
-                    batch.End();
+                    Critter critter = critters.ElementAt(i);
+                    if (!critter.Dead)
+                    {
+                        batch.Begin(SpriteSortMode.BackToFront, BlendState.NonPremultiplied);
+                        batch.Draw(critter.Texture, new Vector2(critter.X, critter.Y), critter.CritterColor);
+                        batch.End();
+                    }
+                    else
+                    {
+                        critters.RemoveAt(critters.IndexOf(critter));
+                        critter = null;
+
+                        crittersLength--;
+                        i--;
+                    }
                 }
             }
         }
@@ -166,8 +187,10 @@ namespace TowerShake.Logic
             _critter.X = critterStartX;
             _critter.Y = critterStartY;
             _critter.HP += level / 4;
-            _critter.Speed += level / 10;
+            _critter.Speed += level / 5;
             _critter.Texture = Presentation.PresentationController.critter_circle;
+            _critter.Points += level / 5;
+            _critter.Dead = false;
 
             critters.Add(_critter);
             return _critter;
@@ -204,15 +227,14 @@ namespace TowerShake.Logic
             if (critter.HP <= 0)
             {
                 die(critter);
+                Player.gold += critter.Points;
             }
         }
 
         private void die(Critter critter)
         {
-            Console.WriteLine("killing critter: " + critter.ToString());
-            critters.Remove(critter);
-            critter = null;
-            _logicClass.saveWaveTime();
+            //Console.WriteLine("killing critter: " + critter.ToString());
+            critter.Dead = true;
         }
 
         private int calculateWaveSize()
@@ -250,7 +272,7 @@ namespace TowerShake.Logic
             get { return _speed; }
         }
 
-        protected float Dexterity
+        public float Dexterity
         {
             set { _dexterity = value; }
             get { return _dexterity; }
@@ -267,5 +289,18 @@ namespace TowerShake.Logic
             set { _color = value; }
             get { return _color; }
         }
+
+        protected int Points
+        {
+            set { _points = value; }
+            get { return _points; }
+        }
+
+        private Boolean Dead
+        {
+            set { _dead = value; }
+            get { return _dead; }
+        }
+
     }
 }

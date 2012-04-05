@@ -64,6 +64,15 @@
       <Output>C:\Users\Rami Ahmed Bock\documents\visual studio 2010\Projects\TowerShake\TowerShake\TowerShake\bin\x86\Debug\Content\graphics\melee_tower.xnb</Output>
       <Time>2012-03-29T22:28:21.6772038+02:00</Time>
     </Item>
+    <Item>
+      <Source>graphics\black_bullet.png</Source>
+      <Name>graphics\black_bullet</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\Rami Ahmed Bock\documents\visual studio 2010\Projects\TowerShake\TowerShake\TowerShake\bin\x86\Debug\Content\graphics\black_bullet.xnb</Output>
+      <Time>2012-04-03T10:01:15.2371653+02:00</Time>
+    </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>
       <TargetPlatform>Windows</TargetPlatform>

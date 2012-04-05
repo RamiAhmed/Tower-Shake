@@ -22,24 +22,31 @@ namespace TowerShake.Logic
     {
         // Public variables
         public static int towerWidth = 15;
-        public static ArrayList towers = new ArrayList();
+        public static List<Tower> towers = new List<Tower>();
         public static Boolean placingTower = false;
 
         // Protected variables
 
         // Private variables
         private LogicController _logic;
-        Critter _critterClass;
+        private Critter _critterClass;
+        //private ArrayList bullets = new ArrayList();
+        private List<Bullet> bullets = new List<Bullet>();
         private int _cost,
                     _range,
                     _damage,
                     _x, _y;
         private long  _lastAttack;
-        private TowerState _towerState;
-        private AttackState _attackState;
         private float _accuracy,
                       _reloadSpeed;
+        private TowerState _towerState;
+        private AttackState _attackState;
         private Texture2D _towerTexture;
+        private TowerType _towerType;
+        private Random random;
+
+        private int stageWidth = Presentation.PresentationController.STAGE_WIDTH;
+        private int stageHeight = Presentation.PresentationController.STAGE_HEIGHT;
 
         public Tower(LogicController parentClass)
         {
@@ -57,32 +64,34 @@ namespace TowerShake.Logic
         private void init()
         {
             _critterClass = new Critter();
+            random = new Random();
         }
 
-        public void updateTowers(SpriteBatch batch)
+        public void updateTowers(SpriteBatch batch, GameTime gameTime)
+        {
+            updateAllTowers(batch);
+            updateBullets(batch, gameTime);
+        }
+
+        private void updateAllTowers(SpriteBatch batch)
         {
             if (towers.Count > 0)
             {
                 foreach (Tower tower in towers)
                 {
-                    batch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
-
+                    Color color = Color.White;
                     if (tower.TowerState == TowerState.Placing)
                     {
-                        Color color = Color.Green;
+                        color = Color.Green;
                         if (isAnyTowerInRange(tower.X, tower.Y))
                         {
                             color = Color.Red;
                         }
-                        batch.Draw(tower.Texture, new Vector2(tower.X, tower.Y), color);
                     }
-                    else
-                    {
-                        batch.Draw(tower.Texture, new Vector2(tower.X, tower.Y), Color.White);
-                    }
-                    
-                    batch.End();
 
+                    batch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
+                    batch.Draw(tower.Texture, new Vector2(tower.X, tower.Y), color);
+                    batch.End();
 
                     if (tower.TowerState == TowerState.Bought)
                     {
@@ -103,19 +112,61 @@ namespace TowerShake.Logic
                     }
                 }
             }
-
         }
 
-        private void shoot(Tower tower, Critter critter)
+        private void updateBullets(SpriteBatch batch, GameTime gameTime)
+        {
+            if (bullets.Count > 0)
+            {
+                float delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
+                int bulletsLength = bullets.Count;
+                //foreach (Bullet bullet in bullets)
+                for (int i = 0; i < bulletsLength; i++)
+                {
+                    Bullet bullet = bullets.ElementAt(i);
+                    if (bullet.done)
+                    {
+                        bullets.Remove(bullet);
+
+                        bulletsLength--;
+                        i--;
+                    }
+                    else
+                    {
+                        //if (bullet.texture != null)
+                        //{
+                            bullet.Update(delta, stageWidth, stageHeight);
+
+                            //batch.Begin(SpriteSortMode.BackToFront, BlendState.NonPremultiplied);
+                            batch.Begin(SpriteSortMode.Texture, BlendState.AlphaBlend);
+                            batch.Draw(bullet.texture, bullet.position, Color.White);
+                            batch.End();
+                       // }
+                    }
+
+                }
+            }
+        }
+
+        private Critter shoot(Tower tower, Critter critter)
         {
             if (isEnemyInRange(tower, critter))
             {
                 if (tower.AttackState == AttackState.Shooting)
                 {
-                    Console.WriteLine(tower.ToString() + " shooting at " + critter.ToString() + " with dmg: " + tower.Damage.ToString());
-                    _critterClass.damageCritter(critter, tower.Damage);
-                    tower.AttackState = AttackState.Reloading;
-                    tower.LastAttack = getCurrentMilliseconds();
+                    if (tower.Accuracy + getRandomDouble() >= critter.Dexterity + getRandomDouble(0.0, 0.5))
+                    {
+                        Console.WriteLine(tower.ToString() + " shooting at " + critter.ToString() + " with dmg: " + tower.Damage.ToString());
+                        _critterClass.damageCritter(critter, tower.Damage);
+                        tower.AttackState = AttackState.Reloading;
+                        tower.LastAttack = getCurrentMilliseconds();
+
+                        createBullet(5.0f, tower, critter);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Tower " + tower.ToString() + " missed critter " + critter.ToString());
+                    }
                 }
                 else
                 {
@@ -126,6 +177,42 @@ namespace TowerShake.Logic
                     }
                 }
             }
+            return critter;
+        }
+
+        private double getRandomDouble(double min, double max)
+        {
+            return min + random.NextDouble() * (max - min);
+        }
+
+        private double getRandomDouble()
+        {
+            return random.NextDouble();
+        }
+
+        private Bullet createBullet(float speed, Tower tower, Critter critter)
+        {
+            Bullet bullet = new Bullet();
+            bullet.speed = speed;
+
+            bullet.position = new Vector2(tower.X + (tower.Texture.Width / 2), tower.Y + (tower.Texture.Height / 2));
+
+            bullet.direction = new Vector2(critter.X, critter.Y) - new Vector2(tower.X, tower.Y);
+            bullet.direction.Normalize();
+
+            /*Texture2D texture = null;
+            switch (tower.Type)
+            {
+                case TowerType.RangedTower: texture = Presentation.PresentationController.black_bullet; break;
+                case TowerType.MeleeTower: texture = Presentation.PresentationController.black_bullet; break;
+                case TowerType.SlowTower: texture = Presentation.PresentationController.black_bullet; break;
+            }
+            bullet.texture = texture;*/
+            bullet.texture = Presentation.PresentationController.black_bullet;
+
+            bullet.done = false;
+            bullets.Add(bullet);
+            return bullet;
         }
 
         private long getCurrentMilliseconds()
@@ -144,9 +231,18 @@ namespace TowerShake.Logic
             {
                 switch (type)
                 {
-                    case TowerType.MeleeTower: tower = new MeleeTower(); break;
-                    case TowerType.RangedTower: tower = new RangedTower(); break;
-                    case TowerType.SlowTower: tower = new SlowTower(); break;
+                    case TowerType.MeleeTower:
+                                            tower = new MeleeTower();
+                                            tower.Type = TowerType.MeleeTower;
+                                            break;
+                    case TowerType.RangedTower:
+                                            tower = new RangedTower();
+                                            tower.Type = TowerType.RangedTower;
+                                            break;
+                    case TowerType.SlowTower:
+                                            tower = new SlowTower();
+                                            tower.Type = TowerType.SlowTower;
+                                            break;
                 }
 
                 int gold = Player.gold,
@@ -334,7 +430,13 @@ namespace TowerShake.Logic
             get { return _attackState; }
         }
 
-        private long LastAttack
+        protected TowerType Type
+        {
+            set { _towerType = value; }
+            get { return _towerType; }
+        }
+
+        protected long LastAttack
         {
             set { _lastAttack = value; }
             get { return _lastAttack; }

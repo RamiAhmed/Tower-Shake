@@ -49,8 +49,9 @@ namespace TowerShake
             this.IsFixedTimeStep = true;
             this.TargetElapsedTime = TimeSpan.FromSeconds(1.0f / gameFPS);
             graphicsManager.IsFullScreen = false;
-            graphicsManager.PreferredBackBufferWidth = presentationController.STAGE_WIDTH;
-            graphicsManager.PreferredBackBufferHeight = presentationController.STAGE_HEIGHT;
+            graphicsManager.PreferredBackBufferWidth = Presentation.PresentationController.STAGE_WIDTH;
+            graphicsManager.PreferredBackBufferHeight = Presentation.PresentationController.STAGE_HEIGHT;
+            //graphicsManager.ApplyChanges();
             Window.Title = "Tower Shake!";   
 
             Console.WriteLine("Initializing");

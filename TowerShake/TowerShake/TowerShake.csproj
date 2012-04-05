@@ -110,6 +110,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Logic\Bullet.cs" />
     <Compile Include="Logic\Critter.cs" />
     <Compile Include="Logic\HighLevel.cs" />
     <Compile Include="Logic\LogicController.cs" />

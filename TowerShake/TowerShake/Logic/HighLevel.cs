@@ -21,7 +21,8 @@ namespace TowerShake.Logic
             this.CritterColor = Color.Black;
             this.HP = 100;
             this.Speed = 10;
-            this.Dexterity = 0.9f;            
+            this.Dexterity = 0.9f;
+            this.Points = 10;
         }
     }
 }

@@ -17,8 +17,8 @@ namespace TowerShake.Presentation
     {
         // Public variables
         public SpriteFont gameFont;
-        public int STAGE_WIDTH = 800,
-                   STAGE_HEIGHT = 600;
+        public static int STAGE_WIDTH = 800,
+                          STAGE_HEIGHT = 600;
 
         // Static public variables
         public static Texture2D mouse;
@@ -26,6 +26,7 @@ namespace TowerShake.Presentation
         public static Texture2D ranged_tower;
         public static Texture2D slow_tower;
         public static Texture2D melee_tower;
+        public static Texture2D black_bullet;
 
         // Private variables
         private Game _gameClass;
@@ -34,7 +35,7 @@ namespace TowerShake.Presentation
                         gameLivesVector,
                         gameGoldVector;
 
-        public PresentationController(Game parentClass) 
+        public PresentationController(Game parentClass)
                                     : base(parentClass)
         {
             _gameClass = parentClass;
@@ -61,6 +62,8 @@ namespace TowerShake.Presentation
             slow_tower = _gameClass.Content.Load<Texture2D>("slow_tower");
             melee_tower = _gameClass.Content.Load<Texture2D>("melee_tower");
 
+            black_bullet = _gameClass.Content.Load<Texture2D>("black_bullet");
+
             gameFont = _gameClass.Content.Load<SpriteFont>("GameFont");
 
             base.LoadContent();
@@ -84,7 +87,7 @@ namespace TowerShake.Presentation
             spriteBatch.End();
 
             spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
-            
+
             spriteBatch.DrawString(gameFont, getGameTime(), gameClockVector, Color.Black);
             spriteBatch.DrawString(gameFont, lives.ToString(), gameLivesVector, Color.Black);
             spriteBatch.DrawString(gameFont, gold.ToString(), gameGoldVector, Color.Black);
@@ -97,23 +100,26 @@ namespace TowerShake.Presentation
         // Called in Game.cs under 'UnloadContent'
         protected override void UnloadContent()
         {
+            mouse.Dispose();
             critter_circle.Dispose();
 
             ranged_tower.Dispose();
             slow_tower.Dispose();
-            //melee_tower.Dispose();               
+            melee_tower.Dispose();
+
+            black_bullet.Dispose();
 
             bg.Dispose();
         }
 
-        
+
         private string getGameTime()
         {
             string gameTime = "";
 
             int _gameTimeSeconds = Logic.LogicController.totalGameTimeSeconds,
                 _gameTimeMinutes = Logic.LogicController.totalGameTimeMinutes;
-            
+
             gameTime = _gameTimeMinutes.ToString() + ":" + _gameTimeSeconds.ToString();
             //Console.WriteLine(gameTime);
             return gameTime;

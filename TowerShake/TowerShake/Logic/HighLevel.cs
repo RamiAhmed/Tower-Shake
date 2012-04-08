@@ -18,11 +18,11 @@ namespace TowerShake.Logic
         public HighLevel() :
                base()
         {
-            this.CritterColor = Color.Black;
+            this.CritterColor = Color.Red;
             this.HP = 100;
-            this.Speed = 10;
+            this.Speed = 10.0f;
             this.Dexterity = 0.9f;
-            this.Points = 10;
+            this.Points = 6;
         }
     }
 }

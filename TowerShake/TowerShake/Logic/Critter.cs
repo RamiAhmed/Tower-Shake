@@ -16,25 +16,22 @@ namespace TowerShake.Logic
 {
     enum CritterType { LowLevel, MediumLevel, HighLevel };
 
-    class Critter
+    class Critter : Sprite
     {
         // Public variables
-        //public static ArrayList critters = new ArrayList();
         public static List<Critter> critters = new List<Critter>();
         public int level = 0;
 
         // Private variables
-       // private Vector2 critterVector;
-        private List<Critter> oldCritters = new List<Critter>();
         private LogicController _logicClass;
-        private int _x, _y, _hp, _speed, _points;
-        private float _dexterity;
-        private Texture2D _texture;
+        private int _hp, _points;
+        private float _dexterity, _speed;
         private Color _color;
-        private Boolean _dead;
-        private int critterStartX = 72,
-                    critterStartY = 40;
+        private Boolean _dead, _active;
         private CritterType crittersLevel;
+        private List<Rectangle> _paths = Presentation.Background.paths;
+        private int critterStartX = 50,
+                    critterStartY = 0;
 
         public Critter(LogicController parentClass)
         {
@@ -48,8 +45,6 @@ namespace TowerShake.Logic
 
         private void updateCritterState()
         {
-            level++; 
-
             if (level < 10)
             {
                 crittersLevel = CritterType.LowLevel;
@@ -66,67 +61,66 @@ namespace TowerShake.Logic
 
         private void moveCritters()
         {
-            //Console.WriteLine("Move critter");
-            int xPos, yPos, speed, width, height;
-            try
+            if (critters.Count > 0)
             {
+                //Console.WriteLine("Move critter");
+                float speed, xPos, yPos;
+                Rectangle critterBox;
                 foreach (Critter critter in critters)
                 {
-                    xPos = critter.X;
-                    yPos = critter.Y;
+                    xPos = critter.Position.X;
+                    yPos = critter.Position.Y;
                     speed = critter.Speed;
-                    height = critter.Texture.Height / 2;
-                    width = critter.Texture.Width / 2;
+                    critterBox = new Rectangle((int)xPos, (int)yPos, critter.Texture.Width / 2, critter.Texture.Height / 2);
 
-                    if (xPos < 375 + width)
+                    if (Presentation.Background.isOnCity(critter))
                     {
-                        // Critters are on the first lane (leftmost)
-                        if (yPos < 380 + height)
+                        // Critters have reached "The City" - Player lost a life
+                        Player.Lives--;
+                        critter.die();
+                        break;
+                    }
+
+                    if (!critter.Active)
+                    {
+                        critter.Move(xPos, yPos + speed);
+                        if (yPos > 0)
                         {
-                            // Critters move downwards
-                            critter.Y += speed;
-                        }
-                        else
-                        {
-                            // Critters have reached the bottom of the first lane
-                            critter.X += speed;
+                            critter.Active = true;
                         }
                     }
-                    else if (xPos < 670 + width)
+                    else if (!Presentation.Background.isOnWalkPath(critter))
                     {
-                        // Critters are on the second lane (middle)
-                        if (yPos > 34 + height)
-                        {
-                            // Critters move upwards
-                            critter.Y -= speed;
-                        }
-                        else
-                        {
-                            // Critters have reached the top of the second lane
-                            critter.X += speed;
-                        }
+                        string critterName = "critter" + critters.IndexOf(critter).ToString();
+                        Console.WriteLine("Error: " + critterName + " is outside path");
+
+                        critter.die();
+                        break;
                     }
                     else
                     {
-                        // Critters are on the third lane (rightmost)
-                        if (yPos < 400 + height)
-                        {
-                            // Critters move downwards
-                            critter.Y += speed;
+                        if (_paths[4].Intersects(critterBox))
+                        {   // on fifth path (vertical)
+                            critter.Move(xPos, yPos + speed);
                         }
-                        else
-                        {
-                            // Critters have reached "The City" - Player lost a life
-                            Player.lives--;
-                            die(critter);
-                            break;
+                        else if (_paths[3].Intersects(critterBox))
+                        {   // on fourth path (horizontal)
+                            critter.Move(xPos + speed, yPos);
+                        }
+                        else if (_paths[2].Intersects(critterBox))
+                        {   // on third path (vertical)
+                            critter.Move(xPos, yPos - speed);
+                        }
+                        else if (_paths[1].Intersects(critterBox))
+                        {   // on second path (horizontal)
+                            critter.Move(xPos + speed, yPos);
+                        }
+                        else if (_paths[0].Intersects(critterBox))
+                        {   // on first path (vertical)
+                            critter.Move(xPos, yPos + speed);
                         }
                     }
                 }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("Error: " + e.ToString());
             }
         }
 
@@ -137,7 +131,7 @@ namespace TowerShake.Logic
             {
                 if (_logicClass.getSecondsSinceLast() > 10)
                 {
-                    createWave(batch);
+                    createWave();
                     updateCritterState();
                     _logicClass.saveWaveTime();
                 } 
@@ -160,7 +154,7 @@ namespace TowerShake.Logic
                     if (!critter.Dead)
                     {
                         batch.Begin(SpriteSortMode.BackToFront, BlendState.NonPremultiplied);
-                        batch.Draw(critter.Texture, new Vector2(critter.X, critter.Y), critter.CritterColor);
+                        batch.Draw(critter.Texture, critter.Position, critter.CritterColor);
                         batch.End();
                     }
                     else
@@ -184,80 +178,80 @@ namespace TowerShake.Logic
                 case CritterType.MediumLevel: _critter = new MediumLevel(); break;
                 case CritterType.HighLevel: _critter = new HighLevel(); break;
             }
-            _critter.X = critterStartX;
-            _critter.Y = critterStartY;
+            //_critter.X = critterStartX;
+            //_critter.Y = critterStartY;
+            _critter.Move((float)critterStartX, (float)critterStartY);
             _critter.HP += level / 4;
             _critter.Speed += level / 5;
             _critter.Texture = Presentation.PresentationController.critter_circle;
             _critter.Points += level / 5;
             _critter.Dead = false;
+            _critter.Active = false;
+
+            if (Sprite.GetRandom() < 0.05)
+            {
+                _critter.upgradeCritter();
+            }
 
             critters.Add(_critter);
             return _critter;
         }
 
-        private void createWave(SpriteBatch batch)
+        private void upgradeCritter()
+        {
+            this.HP += level / 4;
+            //this.Speed -= 1;
+            this.CritterColor = Color.Black;
+            this.Points += level / 6;
+            this.Dexterity *= 1.1f;
+        }
+
+        private void createWave()
         {
             level++;
             int i = 0, 
-                _waveSize = calculateWaveSize(),
-                yPos = 0;
-            Vector2 startVector;
+                _waveSize = calculateWaveSize();
+            float yPos = 0.0f;
             Critter _critter = null;
             for (i = 0; i < _waveSize; i++)
             {
                 //Console.WriteLine("Creating critter : " + i.ToString());
                 _critter = create();
 
-                yPos = _critter.Y - ((_critter.Texture.Height + 10) * i);
-                _critter.Y = yPos;
-
-                startVector = new Vector2(_critter.X, yPos);
-
-                batch.Begin(SpriteSortMode.BackToFront, BlendState.NonPremultiplied);
-                batch.Draw(_critter.Texture, startVector, _critter.CritterColor);
-                batch.End();
+                yPos = _critter.Position.Y - ((_critter.Texture.Height + 5 + GetRandom(10)) * i);
+                _critter.Move(_critter.Position.X, yPos);
             }
         }
 
-        public void damageCritter(Critter critter, int damage)
+        public void damageCritter(int damage)
         {
-            critter.HP -= damage;
-            Console.WriteLine("critter " + critter.ToString() + " receives " + damage.ToString() + " damage");
-            if (critter.HP <= 0)
+            if (damage > 0)
             {
-                die(critter);
-                Player.gold += critter.Points;
+                this.HP -= damage;
+                //Console.WriteLine("critter " + this.ToString() + " receives " + damage.ToString() + " damage");
+                if (this.HP <= 0)
+                {
+                    this.die();
+                    Player.Gold += this.Points;
+                }
             }
         }
 
-        private void die(Critter critter)
+        private void die()
         {
             //Console.WriteLine("killing critter: " + critter.ToString());
-            critter.Dead = true;
+            this.Dead = true;
         }
 
         private int calculateWaveSize()
         {
-            int waveSize = 10 + level;
-            if (waveSize > 20)
+            int waveSize = 10 + (level / 2);
+            if (waveSize > 25)
             {
-                waveSize = 20;
+                waveSize = 25;
             }
 
             return waveSize;
-        }
-
-        public int X 
-        {
-            set {_x = value; }
-            get { return _x; }
-        }
-
-        public int Y
-        {
-            set { _y = value; }
-            get { return _y; }
         }
 
         public int HP
@@ -266,7 +260,7 @@ namespace TowerShake.Logic
             get { return _hp; }
         }
 
-        protected int Speed
+        protected float Speed
         {
             set { _speed = value; }
             get { return _speed; }
@@ -276,12 +270,6 @@ namespace TowerShake.Logic
         {
             set { _dexterity = value; }
             get { return _dexterity; }
-        }
-
-        protected Texture2D Texture
-        {
-            set { _texture = value; }
-            get { return _texture; }
         }
 
         protected Color CritterColor
@@ -300,6 +288,12 @@ namespace TowerShake.Logic
         {
             set { _dead = value; }
             get { return _dead; }
+        }
+
+        private Boolean Active
+        {
+            set { _active = value; }
+            get { return _active; }
         }
 
     }

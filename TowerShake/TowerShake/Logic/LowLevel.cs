@@ -19,11 +19,11 @@ namespace TowerShake.Logic
                base()
         {
             Console.WriteLine("Creating low level critter");
-            this.CritterColor = Color.Yellow;
+            this.CritterColor = Color.Green;
             this.HP = 15;
-            this.Speed = 1;
+            this.Speed = 1.5f;
             this.Dexterity = 0.2f;
-            this.Points = 2;
+            this.Points = 1;
         }
     }
 }

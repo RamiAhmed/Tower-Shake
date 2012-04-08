@@ -26,12 +26,12 @@ namespace TowerShake.Logic
         private Critter _critter;
         private Tower _tower;
         private Logic.Mouse _mouse;        
-        //private Game _game;
+        private Game _game;
 
         public LogicController(Game game) 
                         : base(game)
         {
-            //_game = game;
+            _game = game;
             Console.WriteLine("LogicController instantiated");
 
             init();
@@ -50,6 +50,11 @@ namespace TowerShake.Logic
         { 
             updateGameClock(gameTime);
             _mouse.mouseHandler();
+
+            if (Player.GameEnd)
+            {
+                _game.Exit();
+            }
 
             base.Update(gameTime);
         }

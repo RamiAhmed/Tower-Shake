@@ -18,7 +18,7 @@ namespace TowerShake.Logic
     enum TowerState { Placing, Bought };
     enum AttackState { Shooting, Reloading };
 
-    class Tower
+    class Tower : Sprite
     {
         // Public variables
         public static int towerWidth = 15;
@@ -34,16 +34,13 @@ namespace TowerShake.Logic
         private List<Bullet> bullets = new List<Bullet>();
         private int _cost,
                     _range,
-                    _damage,
-                    _x, _y;
+                    _damage;
         private long  _lastAttack;
         private float _accuracy,
                       _reloadSpeed;
         private TowerState _towerState;
         private AttackState _attackState;
-        private Texture2D _towerTexture;
         private TowerType _towerType;
-        private Random random;
 
         private int stageWidth = Presentation.PresentationController.STAGE_WIDTH;
         private int stageHeight = Presentation.PresentationController.STAGE_HEIGHT;
@@ -64,7 +61,6 @@ namespace TowerShake.Logic
         private void init()
         {
             _critterClass = new Critter();
-            random = new Random();
         }
 
         public void updateTowers(SpriteBatch batch, GameTime gameTime)
@@ -83,14 +79,15 @@ namespace TowerShake.Logic
                     if (tower.TowerState == TowerState.Placing)
                     {
                         color = Color.Green;
-                        if (isAnyTowerInRange(tower.X, tower.Y))
+                        if (isAnyTowerInRange(tower.Position) || Presentation.Background.isOnWalkPath(tower) ||
+                            Presentation.Background.isOnCity(tower)) 
                         {
                             color = Color.Red;
                         }
                     }
 
                     batch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
-                    batch.Draw(tower.Texture, new Vector2(tower.X, tower.Y), color);
+                    batch.Draw(tower.Texture, tower.Position, color);
                     batch.End();
 
                     if (tower.TowerState == TowerState.Bought)
@@ -120,11 +117,11 @@ namespace TowerShake.Logic
             {
                 float delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
                 int bulletsLength = bullets.Count;
-                //foreach (Bullet bullet in bullets)
+
                 for (int i = 0; i < bulletsLength; i++)
                 {
                     Bullet bullet = bullets.ElementAt(i);
-                    if (bullet.done)
+                    if (bullet.Done)
                     {
                         bullets.Remove(bullet);
 
@@ -133,15 +130,11 @@ namespace TowerShake.Logic
                     }
                     else
                     {
-                        //if (bullet.texture != null)
-                        //{
-                            bullet.Update(delta, stageWidth, stageHeight);
+                        bullet.Update(delta, stageWidth, stageHeight);
 
-                            //batch.Begin(SpriteSortMode.BackToFront, BlendState.NonPremultiplied);
-                            batch.Begin(SpriteSortMode.Texture, BlendState.AlphaBlend);
-                            batch.Draw(bullet.texture, bullet.position, Color.White);
-                            batch.End();
-                       // }
+                        batch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend);
+                        batch.Draw(bullet.Texture, bullet.Position, Color.White);                            
+                        batch.End();
                     }
 
                 }
@@ -150,23 +143,20 @@ namespace TowerShake.Logic
 
         private Critter shoot(Tower tower, Critter critter)
         {
-            if (isEnemyInRange(tower, critter))
+            if (Sprite.GetIsInRange(tower.Position, critter.Position, tower.Range))
             {
                 if (tower.AttackState == AttackState.Shooting)
                 {
-                    if (tower.Accuracy + getRandomDouble() >= critter.Dexterity + getRandomDouble(0.0, 0.5))
+                    float bulletSpeed = 5.0f + (float)Sprite.GetRandom(0.0, 2.0);
+                    bool hitCritter = false;
+                    if (tower.Accuracy + Sprite.GetRandom() >= critter.Dexterity + Sprite.GetRandom())
                     {
-                        Console.WriteLine(tower.ToString() + " shooting at " + critter.ToString() + " with dmg: " + tower.Damage.ToString());
-                        _critterClass.damageCritter(critter, tower.Damage);
-                        tower.AttackState = AttackState.Reloading;
-                        tower.LastAttack = getCurrentMilliseconds();
+                        hitCritter = true;
+                    }
 
-                        createBullet(5.0f, tower, critter);
-                    }
-                    else
-                    {
-                        Console.WriteLine("Tower " + tower.ToString() + " missed critter " + critter.ToString());
-                    }
+                    tower.AttackState = AttackState.Reloading;
+                    tower.LastAttack = getCurrentMilliseconds();
+                    createBullet(bulletSpeed, tower, critter, hitCritter);
                 }
                 else
                 {
@@ -180,37 +170,31 @@ namespace TowerShake.Logic
             return critter;
         }
 
-        private double getRandomDouble(double min, double max)
-        {
-            return min + random.NextDouble() * (max - min);
-        }
-
-        private double getRandomDouble()
-        {
-            return random.NextDouble();
-        }
-
-        private Bullet createBullet(float speed, Tower tower, Critter critter)
+        private Bullet createBullet(float speed, Tower tower, Critter critter, Boolean hit)
         {
             Bullet bullet = new Bullet();
-            bullet.speed = speed;
+            bullet.Speed = speed;
 
-            bullet.position = new Vector2(tower.X + (tower.Texture.Width / 2), tower.Y + (tower.Texture.Height / 2));
+            bullet.Position = new Vector2(tower.Position.X + (tower.Texture.Width / 2), 
+                                          tower.Position.Y + (tower.Texture.Height / 2));
 
-            bullet.direction = new Vector2(critter.X, critter.Y) - new Vector2(tower.X, tower.Y);
-            bullet.direction.Normalize();
+            bullet.Direction = critter.Position - tower.Position;
+            bullet.Direction.Normalize();
 
-            /*Texture2D texture = null;
+            Texture2D texture = null;
             switch (tower.Type)
             {
                 case TowerType.RangedTower: texture = Presentation.PresentationController.black_bullet; break;
                 case TowerType.MeleeTower: texture = Presentation.PresentationController.black_bullet; break;
                 case TowerType.SlowTower: texture = Presentation.PresentationController.black_bullet; break;
             }
-            bullet.texture = texture;*/
-            bullet.texture = Presentation.PresentationController.black_bullet;
+            bullet.Texture = texture;
 
-            bullet.done = false;
+            bullet.Target = critter;
+            bullet.Damage = tower.Damage;
+            bullet.Hit = hit;
+
+            bullet.Done = false;
             bullets.Add(bullet);
             return bullet;
         }
@@ -224,7 +208,7 @@ namespace TowerShake.Logic
 
         public static Tower buy(TowerType type)
         {
-            Console.WriteLine("Buy (Tower) called");
+            Console.WriteLine("Buy Tower called");
             Tower tower = null;
 
             if (!Tower.placingTower)
@@ -245,17 +229,16 @@ namespace TowerShake.Logic
                                             break;
                 }
 
-                int gold = Player.gold,
+                int gold = Player.Gold,
                     cost = tower.Cost;
 
                 if (gold >= cost)
                 {
-                    //Player.gold -= cost;
                     towers.Add(tower);
                     tower.TowerState = TowerState.Placing;
                     Tower.placingTower = true;
 
-                    Console.WriteLine("Player buying tower of type: " + type.ToString());
+                    //Console.WriteLine("Player buying tower of type: " + type.ToString());
                 }
                 else
                 {
@@ -272,53 +255,80 @@ namespace TowerShake.Logic
             return tower;
         }
 
-        public static void build(Tower tower, int x, int y)
+        public static bool build(Tower tower, Vector2 position)
         {
-            if (!isAnyTowerInRange(x, y))
+            return build(tower, (int)position.X, (int)position.Y);
+        }
+
+        public static bool build(Tower tower, int x, int y)
+        {
+            bool succesBuild = false;
+            if (!Presentation.Background.isOnCity(tower))
             {
-                int cost = tower.Cost,
-                    gold = Player.gold;
-                if (gold >= cost)
+                if (!Presentation.Background.isOnWalkPath(tower))
                 {
-                    tower.X = x;
-                    tower.Y = y;
-                    tower.TowerState = TowerState.Bought;
-                    tower.AttackState = AttackState.Shooting;
-                    Player.gold -= cost;
-                    Tower.placingTower = false;
+                    if (!isAnyTowerInRange(x, y))
+                    {
+                        int cost = tower.Cost,
+                            gold = Player.Gold;
+                        if (gold >= cost)
+                        {
+                            tower.Move(x, y);
+                            tower.TowerState = TowerState.Bought;
+                            tower.AttackState = AttackState.Shooting;
+                            Player.Gold -= cost;
+                            Tower.placingTower = false;
+                            succesBuild = true;
+
+                            Console.WriteLine("Building tower");
+                        }
+                        else
+                        {
+                            Console.WriteLine("Error: Player does not have enough gold");
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("Error: Cannot place tower, another tower in range");
+                    }
                 }
                 else
                 {
-                    Console.WriteLine("Error: Player does not have enough gold");
+                    Console.WriteLine("Error: Cannot place towers on path");
                 }
             }
             else
             {
-                Console.WriteLine("Error: Cannot place tower, another tower in range");
+                Console.WriteLine("Error: Tower cannot be placed on city");
             }
 
+            return succesBuild;
         }
 
-        private void sell(Tower tower)
+        public void sell()
         {
-            int gold = tower.Cost / 2;
-            Player.gold += gold;
+            int gold = this.Cost / 2;
+            Player.Gold += gold;
 
-            towers.Remove(tower);
-            tower = null;
+            towers.RemoveAt(towers.IndexOf(this));
+            //this = null;
+
+            Console.WriteLine("Sold tower");
         }
 
-        private void update(Tower tower)
+        public void upgrade()
         {
-            int cost = tower.Cost / 3;
-            if (Player.gold >= cost)
+            int cost = this.Cost / 3;
+            if (Player.Gold >= cost)
             {
-                Player.gold -= cost;
-                tower.Damage += (tower.Damage / 10);
-                tower.Range += (tower.Range / 10);
-                tower.Accuracy += (tower.Accuracy * 1.05f);
-                tower.Cost += (tower.Cost / 20);
-                tower.ReloadSpeed += (tower.ReloadSpeed / 10);
+                Player.Gold -= cost;
+                this.Damage += (this.Damage / 10);
+                this.Range += (this.Range / 10);
+                this.Accuracy += (this.Accuracy * 1.1f);
+                this.Cost += (this.Cost / 20);
+                this.ReloadSpeed += (this.ReloadSpeed / 10);
+
+                Console.WriteLine("Tower upgraded");
             }
             else
             {
@@ -326,25 +336,16 @@ namespace TowerShake.Logic
             }
         }
 
-        protected bool isEnemyInRange(Tower tower, Critter critter)
+        public static bool isAnyTowerInRange(Vector2 position)
         {
-            bool inRange = false;
-            int xDiff = Math.Abs(tower.X - critter.X);
-            int yDiff = Math.Abs(tower.Y - critter.Y);
-            int range = tower.Range;
-
-            if (xDiff < range && yDiff < range)
-            {
-                inRange = true;
-            }
-
-            return inRange;
+            return isAnyTowerInRange((int)position.X, (int)position.Y);
         }
 
         public static bool isAnyTowerInRange(int x, int y)
         {
             bool inRange = false;
-            int xDiff, yDiff, towerWidth, towerHeight;
+            float xDiff, yDiff;
+            int towerWidth, towerHeight;
 
             if (towers.Count == 0)
             {
@@ -355,8 +356,8 @@ namespace TowerShake.Logic
             {
                 if (tower.TowerState == TowerState.Bought)
                 {
-                    xDiff = Math.Abs(tower.X - x);
-                    yDiff = Math.Abs(tower.Y - y);
+                    xDiff = Math.Abs(tower.Position.X - x);
+                    yDiff = Math.Abs(tower.Position.Y - y);
                     towerWidth = tower.Texture.Width;
                     towerHeight = tower.Texture.Height;
                     if (xDiff + 1 < towerWidth && yDiff + 1 < towerHeight)
@@ -370,16 +371,19 @@ namespace TowerShake.Logic
             return inRange;
         }
 
-        public int X
+        public static Tower getTowerAtPosition(Vector2 position)
         {
-            set { _x = value; }
-            get { return _x; }
-        }
+            foreach (Tower tower in towers) 
+            {
+                int area = (tower.Texture.Width + tower.Texture.Height) / 2;
+                if (Sprite.GetIsInRange(tower.Position, position, area) &&
+                    tower.TowerState == TowerState.Bought)
+                {
+                    return tower;
+                }
+            }
 
-        public int Y
-        {
-            set { _y = value; }
-            get { return _y; }
+            return null;
         }
 
         protected int Cost
@@ -410,12 +414,6 @@ namespace TowerShake.Logic
         {
             set { _reloadSpeed = value; }
             get { return _reloadSpeed; }
-        }
-
-        public Texture2D Texture
-        {
-            set { _towerTexture = value; }
-            get { return _towerTexture; }
         }
 
         public TowerState TowerState

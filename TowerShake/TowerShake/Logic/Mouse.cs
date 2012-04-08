@@ -13,16 +13,17 @@ using Microsoft.Xna.Framework.Media;
 
 namespace TowerShake.Logic
 {
-    class Mouse 
+    class Mouse : Sprite
     {
         // Public variables
 
         // Private variables
         private MouseState currentMouse,
                            previousMouse;
-        private int _x, _y;
         private Vector2 leftButton, midButton, rightButton;
         private Tower _currentTower;
+        private int _stageWidth = Presentation.PresentationController.STAGE_WIDTH,
+                    _stageHeight = Presentation.PresentationController.STAGE_HEIGHT;
        // private LogicController _logicController;
 
         public Mouse()
@@ -36,13 +37,20 @@ namespace TowerShake.Logic
 
         private void init()
         {
-            leftButton = new Vector2(157, 477);
-            midButton = new Vector2(410, 477);
-            rightButton = new Vector2(670, 477);
+            int yPos = _stageHeight,
+                xPos = (int)((float)_stageWidth * 0.33);
+            leftButton = new Vector2((xPos / 2), yPos);
+            midButton = new Vector2(xPos + (xPos / 2), yPos);
+            rightButton = new Vector2((xPos * 2) + (xPos / 2), yPos);
         }
 
         public void mouseHandler()
         {
+            if (this.Texture == null)
+            {
+                this.Texture = Presentation.PresentationController.mouse;
+            }
+
             currentMouse = Microsoft.Xna.Framework.Input.Mouse.GetState();
 
             if (currentMouse.LeftButton == ButtonState.Pressed &&
@@ -61,23 +69,21 @@ namespace TowerShake.Logic
 
         public void drawMouse(SpriteBatch batch)
         {
-            this.X = currentMouse.X;
-            this.Y = currentMouse.Y;
+            this.Move(currentMouse.X, currentMouse.Y);
 
             batch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
-            batch.Draw(Presentation.PresentationController.mouse, new Rectangle(this.X, this.Y, 35, 20), Color.White);
+            batch.Draw(this.Texture, new Rectangle((int)this.Position.X, (int)this.Position.Y, 35, 20), Color.White);
             batch.End();
 
-            updateTower();
+            updateCurrentTower();
         }
 
-        private void updateTower()
+        private void updateCurrentTower()
         {
             Tower _tower = this.CurrentTower;
             if (_tower != null)
             {
-                _tower.X = this.X;
-                _tower.Y = this.Y;
+                _tower.Position = this.Position;                    
             }
         }
 
@@ -85,73 +91,70 @@ namespace TowerShake.Logic
         {
             Console.WriteLine("Left mouse button clicked");
             int sensitivity = 100;
-            Vector2 mouseVector = new Vector2(this.X, this.Y);
 
             if (Tower.placingTower && this.CurrentTower != null)
             {
-                Tower.build(this.CurrentTower, this.X, this.Y);
-                this.CurrentTower = null;
+                if (Tower.build(this.CurrentTower, this.Position))
+                {
+                    this.CurrentTower = null;
+                }
+            }
+            else
+            {
+                Tower tower = Tower.getTowerAtPosition(this.Position);
+                if (tower != null)
+                {
+                    tower.upgrade();
+                }
             }
 
-            if (isApproximatelyEqual(mouseVector, leftButton, sensitivity))
+
+            if (Sprite.GetIsInRange(this.Position, leftButton, sensitivity))
             {
                 // left button clicked
                 Console.WriteLine("Ranged Tower button clicked");
                 this.CurrentTower = Tower.buy(TowerType.RangedTower);
             }
 
-            else if (isApproximatelyEqual(mouseVector, midButton, sensitivity))
+            else if (Sprite.GetIsInRange(this.Position, midButton, sensitivity))
             {
                 // mid button clicked
                 Console.WriteLine("Melee Tower button clicked");
                 this.CurrentTower = Tower.buy(TowerType.MeleeTower);
             }
 
-            else if (isApproximatelyEqual(mouseVector, rightButton, sensitivity))
+            else if (Sprite.GetIsInRange(this.Position, rightButton, sensitivity))
             {
                 // right button clicked
                 Console.WriteLine("Slow Tower button clicked"); 
                 this.CurrentTower = Tower.buy(TowerType.SlowTower);
             }
 
-            Console.WriteLine("MouseX : " + this.X.ToString() + ", MouseY: " + this.Y.ToString());
+            Console.WriteLine("Mouse : " + this.Position.ToString());
         }
 
         private void mouseRightButton()
         {
             // Right mouse button clicked
             Console.WriteLine("Right mouse button clicked");
-        }
 
-        private bool isApproximatelyEqual(Vector2 one, Vector2 two, int sensitivity)
-        {
-            bool equal = false;
-
-           // Console.WriteLine("xDiff (|" + xDiff.ToString() + "|) < " + sensitivity.ToString() +
-           //              " && yDiff (|" + yDiff.ToString() + "|) < " + sensitivity.ToString());
-            //Console.WriteLine(" X1:" + one.X.ToString() + " - X2:" + two.X.ToString() + " = " + (one.X - two.X).ToString());
-            if (Math.Abs(one.X - two.X) < sensitivity)
+            if (this.CurrentTower != null)
             {
-                if (Math.Abs(one.Y - two.Y) < sensitivity)
-                {
-                    equal = true;
-                }
+                Tower.towers.RemoveAt(Tower.towers.IndexOf(this.CurrentTower));
+                Tower.placingTower = false;
+   
+                this.CurrentTower = null;
 
+                Console.WriteLine("Cancel tower selection");
             }
-            //Console.WriteLine("equal = " + equal.ToString());
-            return equal;
-        }
-
-        private int X
-        {
-            set {_x = value;}
-            get { return _x; }
-        }
-
-        private int Y
-        {
-            set { _y = value; }
-            get { return _y; }
+            else
+            {
+                Tower tower = Tower.getTowerAtPosition(this.Position);
+                if (tower != null)
+                {
+                    tower.sell();
+                }
+            }
         }
 
         public Tower CurrentTower

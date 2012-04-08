@@ -51,7 +51,7 @@ namespace TowerShake
             graphicsManager.IsFullScreen = false;
             graphicsManager.PreferredBackBufferWidth = Presentation.PresentationController.STAGE_WIDTH;
             graphicsManager.PreferredBackBufferHeight = Presentation.PresentationController.STAGE_HEIGHT;
-            //graphicsManager.ApplyChanges();
+            graphicsManager.ApplyChanges();
             Window.Title = "Tower Shake!";   
 
             Console.WriteLine("Initializing");

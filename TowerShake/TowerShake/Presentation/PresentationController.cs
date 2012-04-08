@@ -19,7 +19,7 @@ namespace TowerShake.Presentation
         public SpriteFont gameFont;
         public static int STAGE_WIDTH = 800,
                           STAGE_HEIGHT = 600;
-
+        
         // Static public variables
         public static Texture2D mouse;
         public static Texture2D critter_circle;
@@ -27,10 +27,13 @@ namespace TowerShake.Presentation
         public static Texture2D slow_tower;
         public static Texture2D melee_tower;
         public static Texture2D black_bullet;
+        public static Texture2D path_block;
+        public static Texture2D city;
+        public static Texture2D bgTexture;
 
         // Private variables
-        private Game _gameClass;
-        private Texture2D bg;
+        private Background bg;
+        private Game _gameClass; 
         private Vector2 gameClockVector,
                         gameLivesVector,
                         gameGoldVector;
@@ -46,15 +49,19 @@ namespace TowerShake.Presentation
 
         private void init()
         {
-            gameClockVector = new Vector2(380, 13);
-            gameGoldVector = new Vector2(540, 13);
-            gameLivesVector = new Vector2(700, 13);
+            float yPos = 20;
+            gameClockVector = new Vector2(380, yPos);
+            gameGoldVector = new Vector2(545, yPos);
+            gameLivesVector = new Vector2(705, yPos);         
         }
 
         // Called in Game.cs under 'LoadContent'
         protected override void LoadContent()
         {
-            bg = _gameClass.Content.Load<Texture2D>("background");
+            bgTexture = _gameClass.Content.Load<Texture2D>("background3");
+            path_block = _gameClass.Content.Load<Texture2D>("path_block");
+            city = _gameClass.Content.Load<Texture2D>("city");
+
             critter_circle = _gameClass.Content.Load<Texture2D>("critter1");
             mouse = _gameClass.Content.Load<Texture2D>("mouse");
 
@@ -66,6 +73,8 @@ namespace TowerShake.Presentation
 
             gameFont = _gameClass.Content.Load<SpriteFont>("GameFont");
 
+            bg = new Background();
+
             base.LoadContent();
         }
 
@@ -75,16 +84,18 @@ namespace TowerShake.Presentation
             // Get the current sprite batch
             SpriteBatch spriteBatch = (SpriteBatch)Game.Services.GetService(typeof(SpriteBatch));
 
+            bg.drawBackground(spriteBatch);
+
             int width = this.GraphicsDevice.Viewport.Width;
             int height = this.GraphicsDevice.Viewport.Height;
-            int gold = Logic.Player.gold;
-            int lives = Logic.Player.lives;
+            int gold = Logic.Player.Gold;
+            int lives = Logic.Player.Lives;
 
             //Console.WriteLine("Gold: " + gold.ToString() + ", lives: " + lives.ToString());
 
-            spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
-            spriteBatch.Draw(bg, new Rectangle(0, 0, width, height), Color.White);
-            spriteBatch.End();
+            //spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
+            //spriteBatch.Draw(bg, new Rectangle(0, 0, width, height), Color.White);
+            //spriteBatch.End();
 
             spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
 
@@ -109,7 +120,9 @@ namespace TowerShake.Presentation
 
             black_bullet.Dispose();
 
-            bg.Dispose();
+            city.Dispose();
+            path_block.Dispose();
+            bgTexture.Dispose();
         }
 
 
@@ -119,11 +132,17 @@ namespace TowerShake.Presentation
 
             int _gameTimeSeconds = Logic.LogicController.totalGameTimeSeconds,
                 _gameTimeMinutes = Logic.LogicController.totalGameTimeMinutes;
-
-            gameTime = _gameTimeMinutes.ToString() + ":" + _gameTimeSeconds.ToString();
+            string seconds = _gameTimeSeconds.ToString();
+            if (_gameTimeMinutes > 0 && _gameTimeSeconds < 10)
+            {
+                seconds = "0" + _gameTimeSeconds.ToString();
+            }
+            gameTime = _gameTimeMinutes.ToString() + ":" + seconds;
             //Console.WriteLine(gameTime);
             return gameTime;
         }
+
+
 
     }
 }

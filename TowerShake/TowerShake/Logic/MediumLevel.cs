@@ -18,11 +18,11 @@ namespace TowerShake.Logic
         public MediumLevel() :
                 base()
         {
-            this.CritterColor = Color.Red;
+            this.CritterColor = Color.Yellow;
             this.HP = 50;
-            this.Speed = 5;
+            this.Speed = 5.0f;
             this.Dexterity = 0.6f;
-            this.Points = 6;
+            this.Points = 3;
         }
     }
 }

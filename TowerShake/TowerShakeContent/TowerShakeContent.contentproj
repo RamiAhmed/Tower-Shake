@@ -42,13 +42,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="graphics\background.png">
-      <Name>background</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="graphics\GameFont.spritefont">
       <Name>GameFont</Name>
       <Importer>FontDescriptionImporter</Importer>
@@ -83,15 +76,32 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="graphics\melee_tower.jpg">
+    <Compile Include="graphics\black_bullet.png">
+      <Name>black_bullet</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="graphics\background3.png">
+      <Name>background3</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="graphics\city.png">
+      <Name>city</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="graphics\melee_tower.png">
       <Name>melee_tower</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="graphics\black_bullet.png">
-      <Name>black_bullet</Name>
+    <Compile Include="graphics\path_block.png">
+      <Name>path_block</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

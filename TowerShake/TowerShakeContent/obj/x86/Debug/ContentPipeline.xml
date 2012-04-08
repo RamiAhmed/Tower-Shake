@@ -2,15 +2,6 @@
 <XnaContent xmlns:Pipeline="Microsoft.Xna.Framework.Content.Pipeline">
   <Asset Type="Pipeline:BuildItemCollection">
     <Item>
-      <Source>graphics\background.png</Source>
-      <Name>graphics\background</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Options>None</Options>
-      <Output>C:\Users\Rami Ahmed Bock\documents\visual studio 2010\Projects\TowerShake\TowerShake\TowerShake\bin\x86\Debug\Content\graphics\background.xnb</Output>
-      <Time>2012-03-29T21:13:28.1634136+02:00</Time>
-    </Item>
-    <Item>
       <Source>graphics\GameFont.spritefont</Source>
       <Name>graphics\GameFont</Name>
       <Importer>FontDescriptionImporter</Importer>
@@ -56,15 +47,6 @@
       <Time>2012-03-29T21:53:06.4471749+02:00</Time>
     </Item>
     <Item>
-      <Source>graphics\melee_tower.jpg</Source>
-      <Name>graphics\melee_tower</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Options>None</Options>
-      <Output>C:\Users\Rami Ahmed Bock\documents\visual studio 2010\Projects\TowerShake\TowerShake\TowerShake\bin\x86\Debug\Content\graphics\melee_tower.xnb</Output>
-      <Time>2012-03-29T22:28:21.6772038+02:00</Time>
-    </Item>
-    <Item>
       <Source>graphics\black_bullet.png</Source>
       <Name>graphics\black_bullet</Name>
       <Importer>TextureImporter</Importer>
@@ -72,6 +54,42 @@
       <Options>None</Options>
       <Output>C:\Users\Rami Ahmed Bock\documents\visual studio 2010\Projects\TowerShake\TowerShake\TowerShake\bin\x86\Debug\Content\graphics\black_bullet.xnb</Output>
       <Time>2012-04-03T10:01:15.2371653+02:00</Time>
+    </Item>
+    <Item>
+      <Source>graphics\background3.png</Source>
+      <Name>graphics\background3</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\Rami Ahmed Bock\documents\visual studio 2010\Projects\TowerShake\TowerShake\TowerShake\bin\x86\Debug\Content\graphics\background3.xnb</Output>
+      <Time>2012-04-07T13:23:02.3817643+02:00</Time>
+    </Item>
+    <Item>
+      <Source>graphics\city.png</Source>
+      <Name>graphics\city</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\Rami Ahmed Bock\documents\visual studio 2010\Projects\TowerShake\TowerShake\TowerShake\bin\x86\Debug\Content\graphics\city.xnb</Output>
+      <Time>2012-04-07T13:23:02.3917643+02:00</Time>
+    </Item>
+    <Item>
+      <Source>graphics\melee_tower.png</Source>
+      <Name>graphics\melee_tower</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\Rami Ahmed Bock\documents\visual studio 2010\Projects\TowerShake\TowerShake\TowerShake\bin\x86\Debug\Content\graphics\melee_tower.xnb</Output>
+      <Time>2012-04-07T13:23:02.3917643+02:00</Time>
+    </Item>
+    <Item>
+      <Source>graphics\path_block.png</Source>
+      <Name>graphics\path_block</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\Rami Ahmed Bock\documents\visual studio 2010\Projects\TowerShake\TowerShake\TowerShake\bin\x86\Debug\Content\graphics\path_block.xnb</Output>
+      <Time>2012-04-07T13:24:43.699318+02:00</Time>
     </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>

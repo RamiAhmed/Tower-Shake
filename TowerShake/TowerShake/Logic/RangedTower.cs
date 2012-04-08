@@ -9,11 +9,11 @@ namespace TowerShake.Logic
     {
         public RangedTower()
         {
-            this.Accuracy = 0.5f;
-            this.ReloadSpeed = 1.0f;
+            this.Accuracy = 0.35f;
+            this.ReloadSpeed = 1.5f;
             this.Cost = 25;
-            this.Damage = 10;
-            this.Range = 100;
+            this.Damage = 15;
+            this.Range = 80;
             this.Texture = Presentation.PresentationController.ranged_tower;
         }
     }

@@ -95,7 +95,7 @@ namespace TowerShake.Logic
             if (Tower.placingTower && this.CurrentTower != null)
             {
                 if (Tower.build(this.CurrentTower, this.Position))
-                {
+                { // if tower was successfully built
                     this.CurrentTower = null;
                 }
             }

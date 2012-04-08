@@ -19,6 +19,7 @@ namespace TowerShake.Logic
                base()
         {
             this.CritterColor = Color.Red;
+            this.SlowColor = Color.GhostWhite;
             this.HP = 100;
             this.Speed = 10.0f;
             this.Dexterity = 0.9f;

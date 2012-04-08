@@ -93,7 +93,7 @@ namespace TowerShake.Logic
             }
         }
 
-        public int getCurrentSeconds()
+        public static int getCurrentSeconds()
         {
             return (totalGameTimeMinutes * 60) + totalGameTimeSeconds;
         }

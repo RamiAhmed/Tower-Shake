@@ -9,8 +9,8 @@ namespace TowerShake.Logic
     {
         public MeleeTower()
         {
-            this.Accuracy = 0.5f;
-            this.ReloadSpeed = 0.5f;
+            this.Accuracy = 0.75f;
+            this.ReloadSpeed = 0.25f;
             this.Cost = 25;
             this.Damage = 5;
             this.Range = 50;

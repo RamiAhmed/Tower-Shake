@@ -93,16 +93,6 @@ namespace TowerShake.Logic
             this.Position = new Vector2(x, y);
         }
 
-/*        public void Move(int x)
-        {
-            this.Position = new Vector2((float)x, Position.Y);
-        }
-
-        public void Move(float y)
-        {
-            this.Position = new Vector2(Position.X, y);
-        }
-*/
         public Vector2 Position
         {
             set { _pos = value; }

@@ -24,9 +24,9 @@ namespace TowerShake.Logic
 
         // Private variables
         private LogicController _logicClass;
-        private int _hp, _points;
-        private float _dexterity, _speed;
-        private Color _color;
+        private int _hp, _points, _slowed;
+        private float _dexterity, _speed, _slowDamage;
+        private Color _color, _slowColor;
         private Boolean _dead, _active;
         private CritterType crittersLevel;
         private List<Rectangle> _paths = Presentation.Background.paths;
@@ -72,6 +72,11 @@ namespace TowerShake.Logic
                     yPos = critter.Position.Y;
                     speed = critter.Speed;
                     critterBox = new Rectangle((int)xPos, (int)yPos, critter.Texture.Width / 2, critter.Texture.Height / 2);
+
+                    if (critter.Slowed != 0)
+                    {
+                        speed *= 1f - critter.SlowDamage;
+                    }
 
                     if (Presentation.Background.isOnCity(critter))
                     {
@@ -146,15 +151,22 @@ namespace TowerShake.Logic
             {
                 moveCritters();
 
-                //foreach (Critter critter in critters)
                 int crittersLength = critters.Count;
                 for (int i = 0; i < crittersLength; i++)
                 {
                     Critter critter = critters.ElementAt(i);
                     if (!critter.Dead)
                     {
+                        critter.checkForSlow();
+
+                        Color color = critter.CritterColor;
+                        if (critter.Slowed != 0)
+                        {
+                            color = critter.SlowColor;
+                        }
+
                         batch.Begin(SpriteSortMode.BackToFront, BlendState.NonPremultiplied);
-                        batch.Draw(critter.Texture, critter.Position, critter.CritterColor);
+                        batch.Draw(critter.Texture, critter.Position, color);
                         batch.End();
                     }
                     else
@@ -169,6 +181,18 @@ namespace TowerShake.Logic
             }
         }
 
+        private void checkForSlow()
+        {
+            if (this.Slowed != 0)
+            {
+                if (LogicController.getCurrentSeconds() - this.Slowed > 3)
+                {
+                    this.Slowed = 0;
+                    this.SlowDamage = 0f;
+                }
+            }
+        }
+
         private Critter create()
         {
             Critter _critter = null;
@@ -178,15 +202,15 @@ namespace TowerShake.Logic
                 case CritterType.MediumLevel: _critter = new MediumLevel(); break;
                 case CritterType.HighLevel: _critter = new HighLevel(); break;
             }
-            //_critter.X = critterStartX;
-            //_critter.Y = critterStartY;
-            _critter.Move((float)critterStartX, (float)critterStartY);
+
+            _critter.Move(critterStartX, critterStartY);
             _critter.HP += level / 4;
-            _critter.Speed += level / 5;
+            _critter.Speed += level / 10;
             _critter.Texture = Presentation.PresentationController.critter_circle;
             _critter.Points += level / 5;
             _critter.Dead = false;
             _critter.Active = false;
+            _critter.Slowed = 0;
 
             if (Sprite.GetRandom() < 0.05)
             {
@@ -200,7 +224,7 @@ namespace TowerShake.Logic
         private void upgradeCritter()
         {
             this.HP += level / 4;
-            //this.Speed -= 1;
+            this.Speed *= 0.95f;
             this.CritterColor = Color.Black;
             this.Points += level / 6;
             this.Dexterity *= 1.1f;
@@ -260,7 +284,7 @@ namespace TowerShake.Logic
             get { return _hp; }
         }
 
-        protected float Speed
+        public float Speed
         {
             set { _speed = value; }
             get { return _speed; }
@@ -272,7 +296,7 @@ namespace TowerShake.Logic
             get { return _dexterity; }
         }
 
-        protected Color CritterColor
+        public Color CritterColor
         {
             set { _color = value; }
             get { return _color; }
@@ -294,6 +318,24 @@ namespace TowerShake.Logic
         {
             set { _active = value; }
             get { return _active; }
+        }
+
+        public int Slowed
+        {
+            set { _slowed = value; }
+            get { return _slowed; }
+        }
+
+        public float SlowDamage
+        {
+            set { _slowDamage = value; }
+            get { return _slowDamage; }
+        }
+
+        public Color SlowColor
+        {
+            set { _slowColor = value; }
+            get { return _slowColor; }
         }
 
     }

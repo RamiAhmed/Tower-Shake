@@ -17,10 +17,9 @@ namespace TowerShake.Logic
     {
         private Critter _target;
         private float _speed;
-        private Boolean _done, _hit;
+        private Boolean _done, _hit, _slow = false;
         private int _dmg;
-
-        float _bulletSpeedMultiplier = 1.5f;
+        private float _bulletSpeedMultiplier = 1.5f;
 
         public void Update(float delta, int stageWidth, int stageHeight) 
         {            
@@ -41,6 +40,19 @@ namespace TowerShake.Logic
                 this.Position = Vector2.Zero;
                 this.Done = true;
                 this.Target.damageCritter(this.Damage);
+                if (this.Slow)
+                {
+                    slow(this.Target);
+
+                    foreach (Critter critter in Critter.critters)
+                    {
+                        if (Sprite.GetIsInRange(this.Target.Position, critter.Position, 15))
+                        {
+                            critter.damageCritter(this.Damage);
+                            slow(critter);
+                        }
+                    }
+                }
                 // Damaged critter
             }
             else if (((_posX < 0 || _posX > stageWidth) || (_posY < 0 || _posY > stageHeight)))
@@ -51,6 +63,12 @@ namespace TowerShake.Logic
             }
 
             return this.Done;
+        }
+
+        private void slow(Critter critter)
+        {
+            critter.SlowDamage = 0.2f; // 20 % slow
+            critter.Slowed = LogicController.getCurrentSeconds();
         }
 
         public float Speed
@@ -81,6 +99,12 @@ namespace TowerShake.Logic
         {
             get { return _hit; }
             set { _hit = value; }
+        }
+
+        public bool Slow
+        {
+            get { return _slow; }
+            set { _slow = value; }
         }
 
     }

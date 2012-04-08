@@ -30,7 +30,6 @@ namespace TowerShake.Logic
         // Private variables
         private LogicController _logic;
         private Critter _critterClass;
-        //private ArrayList bullets = new ArrayList();
         private List<Bullet> bullets = new List<Bullet>();
         private int _cost,
                     _range,
@@ -94,16 +93,9 @@ namespace TowerShake.Logic
                     {
                         if (Critter.critters.Count > 0)
                         {
-                            try
+                            foreach (Critter critter in Critter.critters)
                             {
-                                foreach (Critter critter in Critter.critters)
-                                {
-                                    shoot(tower, critter);
-                                }
-                            }
-                            catch (Exception e)
-                            {
-                                Console.WriteLine("Error: " + e.ToString());
+                                shoot(tower, critter);
                             }
                         }
                     }
@@ -184,9 +176,13 @@ namespace TowerShake.Logic
             Texture2D texture = null;
             switch (tower.Type)
             {
-                case TowerType.RangedTower: texture = Presentation.PresentationController.black_bullet; break;
-                case TowerType.MeleeTower: texture = Presentation.PresentationController.black_bullet; break;
-                case TowerType.SlowTower: texture = Presentation.PresentationController.black_bullet; break;
+                case TowerType.RangedTower: texture = Presentation.PresentationController.black_bullet; 
+                                            break;
+                case TowerType.MeleeTower: texture = Presentation.PresentationController.black_bullet; 
+                                           break;
+                case TowerType.SlowTower: texture = Presentation.PresentationController.black_bullet; 
+                                          bullet.Slow = true; 
+                                          break;
             }
             bullet.Texture = texture;
 
@@ -255,11 +251,13 @@ namespace TowerShake.Logic
             return tower;
         }
 
+        // returns true when tower was built successfully
         public static bool build(Tower tower, Vector2 position)
         {
             return build(tower, (int)position.X, (int)position.Y);
         }
 
+        // returns true when tower was built successfully
         public static bool build(Tower tower, int x, int y)
         {
             bool succesBuild = false;
@@ -311,7 +309,6 @@ namespace TowerShake.Logic
             Player.Gold += gold;
 
             towers.RemoveAt(towers.IndexOf(this));
-            //this = null;
 
             Console.WriteLine("Sold tower");
         }

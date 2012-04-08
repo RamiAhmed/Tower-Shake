@@ -9,7 +9,7 @@ namespace TowerShake.Logic
     {
         public RangedTower()
         {
-            this.Accuracy = 0.35f;
+            this.Accuracy = 0.5f;
             this.ReloadSpeed = 1.5f;
             this.Cost = 25;
             this.Damage = 15;

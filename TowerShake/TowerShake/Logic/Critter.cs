@@ -261,7 +261,7 @@ namespace TowerShake.Logic
             }
         }
 
-        private void die()
+        public void die()
         {
             //Console.WriteLine("killing critter: " + critter.ToString());
             this.Dead = true;

@@ -21,6 +21,7 @@ namespace TowerShake.Logic
         private Vector2 _pos, _dir;
         private Texture2D _texture;
         private static Random _rand;
+        private float _width, _height;
 
         public Sprite()
         {
@@ -109,6 +110,18 @@ namespace TowerShake.Logic
         {
             set { _texture = value; }
             get { return _texture; }
+        }
+
+        public float Width
+        {
+            set { _width = value; }
+            get { return _width; }
+        }
+
+        public float Height
+        {
+            set { _height = value; }
+            get { return _height; }
         }
 
     }

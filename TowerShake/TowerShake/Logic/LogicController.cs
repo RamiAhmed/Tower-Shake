@@ -45,11 +45,12 @@ namespace TowerShake.Logic
             _tower = new Tower(this);
         }
 
-        // Runs in Game.cs under 'Update'
+        // Updates every 1/40th second
         public override void Update(GameTime gameTime)
         { 
             updateGameClock(gameTime);
             _mouse.mouseHandler();
+            _player.keyboardHandler();
 
             if (Player.GameEnd)
             {
@@ -59,7 +60,7 @@ namespace TowerShake.Logic
             base.Update(gameTime);
         }
 
-        // Runs in Game.cs under 'Draw'
+        // Updates as often as possible
         public override void Draw(GameTime gameTime)
         {
             SpriteBatch spriteBatch = (SpriteBatch)Game.Services.GetService(typeof(SpriteBatch));

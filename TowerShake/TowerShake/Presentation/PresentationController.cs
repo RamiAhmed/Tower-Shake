@@ -17,31 +17,31 @@ namespace TowerShake.Presentation
     {
         // Public variables
         public SpriteFont gameFont;
+
+        // Public static variables
         public static int STAGE_WIDTH = 800,
                           STAGE_HEIGHT = 600;
-        
-        // Static public variables
-        public static Texture2D mouse;
-        public static Texture2D critter_circle;
-        public static Texture2D ranged_tower;
-        public static Texture2D slow_tower;
-        public static Texture2D melee_tower;
-        public static Texture2D black_bullet;
-        public static Texture2D path_block;
-        public static Texture2D city;
-        public static Texture2D bgTexture;
+        public static Texture2D mouse,
+                                critter_circle,
+                                ranged_tower,
+                                slow_tower,
+                                melee_tower,
+                                black_bullet,
+                                path_block,
+                                city,
+                                bgTexture;
 
         // Private variables
-        private Background bg;
+        private Presentation.Background bg;
         private Game _gameClass; 
         private Vector2 gameClockVector,
                         gameLivesVector,
                         gameGoldVector;
 
-        public PresentationController(Game parentClass)
-                                    : base(parentClass)
+        public PresentationController(Game game)
+            : base(game)
         {
-            _gameClass = parentClass;
+            _gameClass = game;
             Console.WriteLine("PresentationController instantiated");
 
             init();
@@ -55,7 +55,7 @@ namespace TowerShake.Presentation
             gameLivesVector = new Vector2(705, yPos);         
         }
 
-        // Called in Game.cs under 'LoadContent'
+        // Loads content at game start
         protected override void LoadContent()
         {
             bgTexture = _gameClass.Content.Load<Texture2D>("background3");
@@ -73,12 +73,12 @@ namespace TowerShake.Presentation
 
             gameFont = _gameClass.Content.Load<SpriteFont>("GameFont");
 
-            bg = new Background();
+            bg = new Presentation.Background();
 
             base.LoadContent();
         }
 
-        // Called in Game.cs under 'Draw'
+        // Draws as often as possible
         public override void Draw(GameTime gameTime)
         {
             // Get the current sprite batch
@@ -86,16 +86,10 @@ namespace TowerShake.Presentation
 
             bg.drawBackground(spriteBatch);
 
-            int width = this.GraphicsDevice.Viewport.Width;
-            int height = this.GraphicsDevice.Viewport.Height;
+            int width = GraphicsDevice.Viewport.Width;
+            int height = GraphicsDevice.Viewport.Height;
             int gold = Logic.Player.Gold;
             int lives = Logic.Player.Lives;
-
-            //Console.WriteLine("Gold: " + gold.ToString() + ", lives: " + lives.ToString());
-
-            //spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
-            //spriteBatch.Draw(bg, new Rectangle(0, 0, width, height), Color.White);
-            //spriteBatch.End();
 
             spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
 
@@ -108,7 +102,7 @@ namespace TowerShake.Presentation
             base.Draw(gameTime);
         }
 
-        // Called in Game.cs under 'UnloadContent'
+        // Unloads content at game end
         protected override void UnloadContent()
         {
             mouse.Dispose();
@@ -138,10 +132,9 @@ namespace TowerShake.Presentation
                 seconds = "0" + _gameTimeSeconds.ToString();
             }
             gameTime = _gameTimeMinutes.ToString() + ":" + seconds;
-            //Console.WriteLine(gameTime);
+
             return gameTime;
         }
-
 
 
     }

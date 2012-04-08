@@ -27,7 +27,7 @@ namespace TowerShake.Logic
                            lives = 10;
         private static Boolean gameEnded = false;
         private static PlayerAbility playerAbility;
-        KeyboardState currentKey, previousKey;
+        KeyboardState currentKey, previousKey = Keyboard.GetState();
 
         public Player(LogicController parentClass)
         {
@@ -47,31 +47,32 @@ namespace TowerShake.Logic
         {
             currentKey = Keyboard.GetState();
 
-            if (currentKey.IsKeyDown(Keys.Space) && previousKey.IsKeyUp(Keys.Space))
+            if (currentKey.IsKeyDown(Keys.P) && previousKey.IsKeyUp(Keys.P))
             {
-                if (currentKey.IsKeyDown(Keys.P))
-                {
-                    playerAbility = PlayerAbility.PARALYZE;
-                }
-                else if (currentKey.IsKeyDown(Keys.S))
-                {
-                    playerAbility = PlayerAbility.SLOW;
-                }
-                else if (currentKey.IsKeyDown(Keys.K))
-                {
-                    playerAbility = PlayerAbility.KILL;
-                }
-                else if (currentKey.IsKeyDown(Keys.B))
-                {
-                    playerAbility = PlayerAbility.BOOST;
-                }
-                else
-                {
-                    playerAbility = PlayerAbility.NULL;
-                }
-
-                specialAbility(playerAbility);
+                playerAbility = PlayerAbility.PARALYZE;
             }
+            else if (currentKey.IsKeyDown(Keys.S) && previousKey.IsKeyUp(Keys.S))
+            {
+                playerAbility = PlayerAbility.SLOW;
+            }
+            else if (currentKey.IsKeyDown(Keys.K) && previousKey.IsKeyUp(Keys.K))
+            {
+                playerAbility = PlayerAbility.KILL;
+            }
+            else if (currentKey.IsKeyDown(Keys.B) && previousKey.IsKeyUp(Keys.B))
+            {
+                playerAbility = PlayerAbility.BOOST;
+            }
+            else
+            {
+                playerAbility = PlayerAbility.NULL;
+            }
+
+            if (playerAbility != PlayerAbility.NULL)
+            {
+                specialAbility(playerAbility);
+            }                    
+
             previousKey = currentKey;
         }
 
@@ -91,25 +92,64 @@ namespace TowerShake.Logic
 
         private void paralyze()
         {
-            foreach (Critter critter in Critter.critters)
+            Console.WriteLine("Special Ability: All critters paralyzed");
+            if (Critter.critters.Count > 0)
             {
-
+                foreach (Critter critter in Critter.critters)
+                {
+                    critter.Slowed = LogicController.getCurrentSeconds();
+                    critter.SlowDamage = 1f;
+                }
             }
         }
 
         private void kill()
         {
-
+            Console.WriteLine("Special Ability: All critters killed");
+            if (Critter.critters.Count > 0)
+            {
+                foreach (Critter critter in Critter.critters)
+                {
+                    critter.die();
+                }
+            }
         }
 
         private void slow()
         {
-
+            Console.WriteLine("Special Ability: All critters slowed");
+            if (Critter.critters.Count > 0)
+            {
+                foreach (Critter critter in Critter.critters)
+                {
+                    critter.Slowed = LogicController.getCurrentSeconds();
+                    critter.SlowDamage = 0.75f;
+                    critter.damageCritter(5);
+                }
+            }
         }
 
         private void boost()
         {
+            Console.WriteLine("Special Ability: All towers boosted");
+            if (Tower.towers.Count > 0)
+            {
+                foreach (Tower tower in Tower.towers)
+                {
+                    if (tower.Boosted == 0 && tower.TowerState == TowerState.Bought)
+                    {
+                        tower.Boosted = LogicController.getCurrentSeconds();
 
+                        tower.Accuracy *= 2;
+                        tower.Damage *= 2;
+                        tower.ReloadSpeed *= 2;
+                        tower.Accuracy *= 2;
+                        tower.Range *= 2;
+                        tower.Width *= 2;
+                        tower.Height *= 2;
+                    }
+                }
+            }
         }
 
         public static int Gold

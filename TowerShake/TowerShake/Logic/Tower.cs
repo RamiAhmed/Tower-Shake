@@ -33,7 +33,8 @@ namespace TowerShake.Logic
         private List<Bullet> bullets = new List<Bullet>();
         private int _cost,
                     _range,
-                    _damage;
+                    _damage,
+                    _boosted;
         private long  _lastAttack;
         private float _accuracy,
                       _reloadSpeed;
@@ -74,6 +75,8 @@ namespace TowerShake.Logic
             {
                 foreach (Tower tower in towers)
                 {
+                    tower.checkForBoosted();
+
                     Color color = Color.White;
                     if (tower.TowerState == TowerState.Placing)
                     {
@@ -85,8 +88,9 @@ namespace TowerShake.Logic
                         }
                     }
 
+                    Rectangle towerRect = new Rectangle((int)tower.Position.X, (int)tower.Position.Y, (int)tower.Width, (int)tower.Height);
                     batch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
-                    batch.Draw(tower.Texture, tower.Position, color);
+                    batch.Draw(tower.Texture, towerRect, color);
                     batch.End();
 
                     if (tower.TowerState == TowerState.Bought)
@@ -99,6 +103,25 @@ namespace TowerShake.Logic
                             }
                         }
                     }
+                }
+            }
+        }
+
+        private void checkForBoosted()
+        {
+            if (this.Boosted != 0)
+            {
+                if (LogicController.getCurrentSeconds() - this.Boosted > 5)
+                {
+                    this.Boosted = 0;
+
+                    this.Accuracy /= 2;
+                    this.Damage /= 2;
+                    this.ReloadSpeed /= 2;
+                    this.Accuracy /= 2;
+                    this.Range /= 2;
+                    this.Width /= 2;
+                    this.Height /= 2;
                 }
             }
         }
@@ -230,6 +253,9 @@ namespace TowerShake.Logic
 
                 if (gold >= cost)
                 {
+                    tower.Width = (float)tower.Texture.Width;
+                    tower.Height = (float)tower.Texture.Height;
+
                     towers.Add(tower);
                     tower.TowerState = TowerState.Placing;
                     Tower.placingTower = true;
@@ -324,6 +350,8 @@ namespace TowerShake.Logic
                 this.Accuracy += (this.Accuracy * 1.1f);
                 this.Cost += (this.Cost / 20);
                 this.ReloadSpeed += (this.ReloadSpeed / 10);
+                this.Width *= 1.05f;
+                this.Height *= 1.05f;
 
                 Console.WriteLine("Tower upgraded");
             }
@@ -341,8 +369,7 @@ namespace TowerShake.Logic
         public static bool isAnyTowerInRange(int x, int y)
         {
             bool inRange = false;
-            float xDiff, yDiff;
-            int towerWidth, towerHeight;
+            float xDiff, yDiff, towerWidth, towerHeight;
 
             if (towers.Count == 0)
             {
@@ -355,8 +382,8 @@ namespace TowerShake.Logic
                 {
                     xDiff = Math.Abs(tower.Position.X - x);
                     yDiff = Math.Abs(tower.Position.Y - y);
-                    towerWidth = tower.Texture.Width;
-                    towerHeight = tower.Texture.Height;
+                    towerWidth = tower.Width;
+                    towerHeight = tower.Height;
                     if (xDiff + 1 < towerWidth && yDiff + 1 < towerHeight)
                     {
                         inRange = true;
@@ -372,7 +399,7 @@ namespace TowerShake.Logic
         {
             foreach (Tower tower in towers) 
             {
-                int area = (tower.Texture.Width + tower.Texture.Height) / 2;
+                float area = (tower.Width + tower.Height) * 0.5f;
                 if (Sprite.GetIsInRange(tower.Position, position, area) &&
                     tower.TowerState == TowerState.Bought)
                 {
@@ -389,25 +416,25 @@ namespace TowerShake.Logic
             get { return _cost; }
         }
 
-        protected int Range
+        public int Range
         {
             set { _range = value; }
             get { return _range; }
         }
 
-        protected int Damage
+        public int Damage
         {
             set { _damage = value; }
             get { return _damage; }
         }
 
-        protected float Accuracy
+        public float Accuracy
         {
             set { _accuracy = value; }
             get { return _accuracy; }
         }
 
-        protected float ReloadSpeed
+        public float ReloadSpeed
         {
             set { _reloadSpeed = value; }
             get { return _reloadSpeed; }
@@ -431,10 +458,16 @@ namespace TowerShake.Logic
             get { return _towerType; }
         }
 
-        protected long LastAttack
+        private long LastAttack
         {
             set { _lastAttack = value; }
             get { return _lastAttack; }
+        }
+
+        public int Boosted
+        {
+            set { _boosted = value; }
+            get { return _boosted; }
         }
 
     }

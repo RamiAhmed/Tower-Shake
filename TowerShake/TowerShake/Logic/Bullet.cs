@@ -15,6 +15,7 @@ namespace TowerShake.Logic
 {
     class Bullet : Sprite
     {
+        private int splashRange = 25;
         private Critter _target;
         private float _speed;
         private Boolean _done, _hit, _slow = false;
@@ -46,7 +47,8 @@ namespace TowerShake.Logic
 
                     foreach (Critter critter in Critter.critters)
                     {
-                        if (Sprite.GetIsInRange(this.Target.Position, critter.Position, 15))
+                        if (Sprite.GetIsInRange(this.Target.Position, critter.Position, splashRange) &&
+                            critter != this.Target)
                         {
                             critter.damageCritter(this.Damage);
                             slow(critter);
@@ -67,7 +69,12 @@ namespace TowerShake.Logic
 
         private void slow(Critter critter)
         {
-            critter.SlowDamage = 0.2f; // 20 % slow
+            float slowDamage = 0.2f; // 20 % slow
+
+            if (critter.SlowDamage < slowDamage)
+            {
+                critter.SlowDamage = slowDamage; 
+            }
             critter.Slowed = LogicController.getCurrentSeconds();
         }
 

@@ -36,7 +36,7 @@ namespace TowerShake.Logic
             }
             else
             {
-                return -1;
+                return 0;
             }
         }
 
@@ -48,7 +48,7 @@ namespace TowerShake.Logic
             }
             else
             {
-                return -1;
+                return 0;
             }
         }
 
@@ -60,7 +60,7 @@ namespace TowerShake.Logic
             }
             else
             {
-                return -1.0;
+                return 0;
             }
         }
 
@@ -76,12 +76,13 @@ namespace TowerShake.Logic
 
         public static Boolean GetIsInRange(Vector2 one, Vector2 two, float range)
         {
+            bool inRange = false;
             if (Math.Abs(one.X - two.X) < range && Math.Abs(one.Y - two.Y) < range)
             {
-                return true;
+                inRange = true;
             }
 
-            return false;
+            return inRange;
         }
 
         public void Move(int x, int y)

@@ -87,6 +87,10 @@ namespace TowerShake.Logic
                             color = Color.Red;
                         }
                     }
+                    else if (tower.Boosted != 0)
+                    {
+                        color = Color.Gold;
+                    }
 
                     Rectangle towerRect = new Rectangle((int)tower.Position.X, (int)tower.Position.Y, (int)tower.Width, (int)tower.Height);
                     batch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
@@ -117,11 +121,9 @@ namespace TowerShake.Logic
 
                     this.Accuracy /= 2;
                     this.Damage /= 2;
-                    this.ReloadSpeed /= 2;
+                    this.ReloadSpeed *= 2;
                     this.Accuracy /= 2;
                     this.Range /= 2;
-                    this.Width /= 2;
-                    this.Height /= 2;
                 }
             }
         }

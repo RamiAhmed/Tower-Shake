@@ -68,10 +68,7 @@ namespace TowerShake.Logic
                 playerAbility = PlayerAbility.NULL;
             }
 
-            if (playerAbility != PlayerAbility.NULL)
-            {
-                specialAbility(playerAbility);
-            }                    
+            specialAbility(playerAbility);                    
 
             previousKey = currentKey;
         }
@@ -80,12 +77,21 @@ namespace TowerShake.Logic
         {
             if (ability != PlayerAbility.NULL)
             {
-                switch (ability)
+                if (Player.Gold > 50)
                 {
-                    case PlayerAbility.PARALYZE: paralyze(); break;
-                    case PlayerAbility.KILL: kill(); break;
-                    case PlayerAbility.SLOW: slow(); break;
-                    case PlayerAbility.BOOST: boost();  break;
+                    Player.Gold -= 50;
+
+                    switch (ability)
+                    {
+                        case PlayerAbility.PARALYZE: paralyze(); break;
+                        case PlayerAbility.KILL: kill(); break;
+                        case PlayerAbility.SLOW: slow(); break;
+                        case PlayerAbility.BOOST: boost(); break;
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Error: Player cannot afford special ability");
                 }
             }
         }
@@ -142,11 +148,9 @@ namespace TowerShake.Logic
 
                         tower.Accuracy *= 2;
                         tower.Damage *= 2;
-                        tower.ReloadSpeed *= 2;
+                        tower.ReloadSpeed /= 2;
                         tower.Accuracy *= 2;
                         tower.Range *= 2;
-                        tower.Width *= 2;
-                        tower.Height *= 2;
                     }
                 }
             }

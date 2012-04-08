@@ -45,11 +45,11 @@ namespace TowerShake.Logic
 
         private void updateCritterState()
         {
-            if (level < 10)
+            if (level < 5)
             {
                 crittersLevel = CritterType.LowLevel;
             }
-            else if (level < 20)
+            else if (level < 10)
             {
                 crittersLevel = CritterType.MediumLevel;
             }
@@ -71,7 +71,8 @@ namespace TowerShake.Logic
                     xPos = critter.Position.X;
                     yPos = critter.Position.Y;
                     speed = critter.Speed;
-                    critterBox = new Rectangle((int)xPos, (int)yPos, critter.Texture.Width / 2, critter.Texture.Height / 2);
+                    critterBox = new Rectangle((int)xPos, (int)yPos, 
+                        (int)(critter.Width * 0.5f), (int)(critter.Height * 0.5f));
 
                     if (critter.Slowed != 0)
                     {
@@ -165,8 +166,10 @@ namespace TowerShake.Logic
                             color = critter.SlowColor;
                         }
 
+                        Rectangle critterRect = new Rectangle((int)critter.Position.X, (int)critter.Position.Y,
+                                                              (int)critter.Width, (int)critter.Height);
                         batch.Begin(SpriteSortMode.BackToFront, BlendState.NonPremultiplied);
-                        batch.Draw(critter.Texture, critter.Position, color);
+                        batch.Draw(critter.Texture, critterRect, color);
                         batch.End();
                     }
                     else
@@ -204,10 +207,16 @@ namespace TowerShake.Logic
             }
 
             _critter.Move(critterStartX, critterStartY);
-            _critter.HP += level / 4;
-            _critter.Speed += level / 10;
+
             _critter.Texture = Presentation.PresentationController.critter_circle;
-            _critter.Points += level / 5;
+            _critter.Width = _critter.Texture.Width;
+            _critter.Height = _critter.Texture.Height;
+
+            _critter.HP += level / 4;
+            _critter.Speed += level / 20;
+            _critter.Points += level / 10;
+            _critter.Dexterity += level / 100;
+
             _critter.Dead = false;
             _critter.Active = false;
             _critter.Slowed = 0;
@@ -223,11 +232,13 @@ namespace TowerShake.Logic
 
         private void upgradeCritter()
         {
-            this.HP += level / 4;
+            this.HP += level * 2;
             this.Speed *= 0.95f;
             this.CritterColor = Color.Black;
             this.Points += level / 6;
-            this.Dexterity *= 1.1f;
+            this.Dexterity *= 1.25f;
+            this.Width *= 1.5f;
+            this.Height *= 1.5f;
         }
 
         private void createWave()
@@ -235,7 +246,7 @@ namespace TowerShake.Logic
             level++;
             int i = 0, 
                 _waveSize = calculateWaveSize();
-            float yPos = 0.0f;
+            float yPos = 0f;
             Critter _critter = null;
             for (i = 0; i < _waveSize; i++)
             {

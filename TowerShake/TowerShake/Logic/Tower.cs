@@ -82,9 +82,10 @@ namespace TowerShake.Logic
                     Color color = Color.White;
                     if (tower.TowerState == TowerState.Placing)
                     {
+                        float yPos = stageHeight - ((float)(Presentation.PresentationController.melee_tower_button.Height) * 1.5f);
                         color = Color.Green;
                         if (isAnyTowerInRange(tower.Position) || Presentation.Background.isOnWalkPath(tower) ||
-                            Presentation.Background.isOnCity(tower)) 
+                            Presentation.Background.isOnCity(tower) || tower.Position.Y > yPos)
                         {
                             color = Color.Red;
                         }

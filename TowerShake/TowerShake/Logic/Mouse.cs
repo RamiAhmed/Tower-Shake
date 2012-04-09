@@ -46,11 +46,6 @@ namespace TowerShake.Logic
 
         public void mouseHandler()
         {
-            if (this.Texture == null)
-            {
-                this.Texture = Presentation.PresentationController.mouse;
-            }
-
             currentMouse = Microsoft.Xna.Framework.Input.Mouse.GetState();
 
             if (currentMouse.LeftButton == ButtonState.Pressed &&
@@ -69,6 +64,11 @@ namespace TowerShake.Logic
 
         public void drawMouse(SpriteBatch batch)
         {
+            if (this.Texture == null)
+            {
+                this.Texture = Presentation.PresentationController.mouse;
+            }
+
             this.Move(currentMouse.X, currentMouse.Y);
 
             batch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
@@ -83,7 +83,7 @@ namespace TowerShake.Logic
             Tower _tower = this.CurrentTower;
             if (_tower != null)
             {
-                _tower.Position = this.Position;                    
+                _tower.Position = this.Position;
             }
         }
 
@@ -94,9 +94,17 @@ namespace TowerShake.Logic
 
             if (Tower.placingTower && this.CurrentTower != null)
             {
-                if (Tower.build(this.CurrentTower, this.Position))
-                { // if tower was successfully built
-                    this.CurrentTower = null;
+                float yPos = _stageHeight - ((float)(Presentation.PresentationController.melee_tower_button.Height) * 1.5f);
+                if (this.Position.Y < yPos)
+                {
+                    if (Tower.build(this.CurrentTower, this.Position))
+                    { // if tower was successfully built
+                        this.CurrentTower = null;
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Error: Cannot place towers on button area");
                 }
             }
             else
@@ -106,30 +114,28 @@ namespace TowerShake.Logic
                 {
                     tower.upgrade();
                 }
-            }
 
+                if (Sprite.GetIsInRange(this.Position, leftButton, sensitivity))
+                {
+                    // left button clicked
+                    Console.WriteLine("Ranged Tower button clicked");
+                    this.CurrentTower = Tower.buy(TowerType.RangedTower);
+                }
 
-            if (Sprite.GetIsInRange(this.Position, leftButton, sensitivity))
-            {
-                // left button clicked
-                Console.WriteLine("Ranged Tower button clicked");
-                this.CurrentTower = Tower.buy(TowerType.RangedTower);
-            }
+                else if (Sprite.GetIsInRange(this.Position, midButton, sensitivity))
+                {
+                    // mid button clicked
+                    Console.WriteLine("Melee Tower button clicked");
+                    this.CurrentTower = Tower.buy(TowerType.MeleeTower);
+                }
 
-            else if (Sprite.GetIsInRange(this.Position, midButton, sensitivity))
-            {
-                // mid button clicked
-                Console.WriteLine("Melee Tower button clicked");
-                this.CurrentTower = Tower.buy(TowerType.MeleeTower);
-            }
-
-            else if (Sprite.GetIsInRange(this.Position, rightButton, sensitivity))
-            {
-                // right button clicked
-                Console.WriteLine("Slow Tower button clicked"); 
-                this.CurrentTower = Tower.buy(TowerType.SlowTower);
-            }
-
+                else if (Sprite.GetIsInRange(this.Position, rightButton, sensitivity))
+                {
+                    // right button clicked
+                    Console.WriteLine("Slow Tower button clicked");
+                    this.CurrentTower = Tower.buy(TowerType.SlowTower);
+                }
+            } 
             Console.WriteLine("Mouse : " + this.Position.ToString());
         }
 

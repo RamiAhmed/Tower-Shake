@@ -22,9 +22,14 @@ namespace TowerShake.Presentation
         // Private variables
         private Texture2D bgTexture = PresentationController.bgTexture, 
                           pathTexture = PresentationController.path_block,
-                          cityTexture = PresentationController.city;
+                          cityTexture = PresentationController.city,
+                          leftButtonTexture = PresentationController.ranged_tower_button,
+                          midButtonTexture = PresentationController.melee_tower_button,
+                          rightButtonTexture = PresentationController.slow_tower_button;
         private Rectangle entireScreen = new Rectangle(0, 0, PresentationController.STAGE_WIDTH, PresentationController.STAGE_HEIGHT);
-        private int pathWidth = 10;
+        private int pathWidth = 10,
+                    stageWidth = PresentationController.STAGE_WIDTH,
+                    stageHeight = PresentationController.STAGE_HEIGHT;
 
         public Background()
         {
@@ -37,9 +42,43 @@ namespace TowerShake.Presentation
             batch.Draw(bgTexture, entireScreen, Color.White);
             batch.End();
 
+            drawTowerButtons(batch);
+
             drawPaths(batch);
 
             drawCity(batch);
+        }
+
+        private void drawTowerButtons(SpriteBatch batch)
+        {
+            int yPos = stageHeight - leftButtonTexture.Height - 1;
+            Color active = Color.White,
+                  inactive = new Color(0.5f, 0.5f, 0.5f, 1f);
+
+            batch.Begin(SpriteSortMode.BackToFront, BlendState.NonPremultiplied);
+
+            Color leftColor = active;
+            if (Logic.Player.Gold < Logic.Tower.ranged_tower_cost)
+            {
+                leftColor = inactive;
+            }
+            batch.Draw(leftButtonTexture, new Vector2(0, yPos), leftColor); // ranged tower
+
+            Color midColor = active;
+            if (Logic.Player.Gold < Logic.Tower.melee_tower_cost)
+            {
+                midColor = inactive;
+            }
+            batch.Draw(midButtonTexture, new Vector2(leftButtonTexture.Width, stageHeight - midButtonTexture.Height + 2), midColor); // melee tower
+
+            Color rightColor = active;
+            if (Logic.Player.Gold < Logic.Tower.slow_tower_cost)
+            {
+                rightColor = inactive;
+            }
+            batch.Draw(rightButtonTexture, new Vector2(leftButtonTexture.Width + midButtonTexture.Width, yPos), rightColor); // slow tower
+           
+            batch.End();
         }
 
         private void drawCity(SpriteBatch batch)

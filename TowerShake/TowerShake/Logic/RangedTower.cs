@@ -11,7 +11,7 @@ namespace TowerShake.Logic
         {
             this.Accuracy = 0.5f;
             this.ReloadSpeed = 1.5f;
-            this.Cost = 25;
+            this.Cost = Tower.ranged_tower_cost;
             this.Damage = 15;
             this.Range = 80;
             this.Texture = Presentation.PresentationController.ranged_tower;

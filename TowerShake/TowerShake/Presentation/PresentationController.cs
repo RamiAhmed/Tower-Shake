@@ -29,7 +29,10 @@ namespace TowerShake.Presentation
                                 black_bullet,
                                 path_block,
                                 city,
-                                bgTexture;
+                                bgTexture,
+                                melee_tower_button,
+                                ranged_tower_button,
+                                slow_tower_button;
 
         // Private variables
         private Presentation.Background bg;
@@ -55,21 +58,30 @@ namespace TowerShake.Presentation
             gameLivesVector = new Vector2(705, yPos);         
         }
 
+        private Texture2D loadTexture2D(string assetName)
+        {
+            return _gameClass.Content.Load<Texture2D>(assetName);
+        }
+
         // Loads content at game start
         protected override void LoadContent()
         {
-            bgTexture = _gameClass.Content.Load<Texture2D>("background3");
-            path_block = _gameClass.Content.Load<Texture2D>("path_block");
-            city = _gameClass.Content.Load<Texture2D>("city");
+            bgTexture = loadTexture2D("background4");
+            path_block = loadTexture2D("path_block");
+            city = loadTexture2D("city");
 
-            critter_circle = _gameClass.Content.Load<Texture2D>("critter1");
-            mouse = _gameClass.Content.Load<Texture2D>("mouse");
+            critter_circle = loadTexture2D("critter1");
+            mouse = loadTexture2D("mouse");
 
-            ranged_tower = _gameClass.Content.Load<Texture2D>("ranged_tower");
-            slow_tower = _gameClass.Content.Load<Texture2D>("slow_tower");
-            melee_tower = _gameClass.Content.Load<Texture2D>("melee_tower");
+            ranged_tower = loadTexture2D("ranged_tower");
+            slow_tower = loadTexture2D("slow_tower");
+            melee_tower = loadTexture2D("melee_tower");
 
-            black_bullet = _gameClass.Content.Load<Texture2D>("black_bullet");
+            ranged_tower_button = loadTexture2D("ranged_tower_button");
+            slow_tower_button = loadTexture2D("slow_tower_button");
+            melee_tower_button = loadTexture2D("melee_tower_button");
+
+            black_bullet = loadTexture2D("black_bullet");
 
             gameFont = _gameClass.Content.Load<SpriteFont>("GameFont");
 
@@ -112,13 +124,16 @@ namespace TowerShake.Presentation
             slow_tower.Dispose();
             melee_tower.Dispose();
 
+            ranged_tower_button.Dispose();
+            slow_tower_button.Dispose();
+            melee_tower_button.Dispose();
+
             black_bullet.Dispose();
 
             city.Dispose();
             path_block.Dispose();
             bgTexture.Dispose();
         }
-
 
         private string getGameTime()
         {
@@ -127,7 +142,7 @@ namespace TowerShake.Presentation
             int _gameTimeSeconds = Logic.LogicController.totalGameTimeSeconds,
                 _gameTimeMinutes = Logic.LogicController.totalGameTimeMinutes;
             string seconds = _gameTimeSeconds.ToString();
-            if (_gameTimeMinutes > 0 && _gameTimeSeconds < 10)
+            if (_gameTimeSeconds < 10)
             {
                 seconds = "0" + _gameTimeSeconds.ToString();
             }

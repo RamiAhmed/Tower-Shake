@@ -24,7 +24,9 @@ namespace TowerShake.Logic
         public static int towerWidth = 15;
         public static List<Tower> towers = new List<Tower>();
         public static Boolean placingTower = false;
-
+        public static int melee_tower_cost = 25,
+                          ranged_tower_cost = 20,
+                          slow_tower_cost = 30;
         // Protected variables
 
         // Private variables

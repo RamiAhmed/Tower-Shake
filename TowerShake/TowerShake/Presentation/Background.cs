@@ -26,10 +26,9 @@ namespace TowerShake.Presentation
                           leftButtonTexture = PresentationController.ranged_tower_button,
                           midButtonTexture = PresentationController.melee_tower_button,
                           rightButtonTexture = PresentationController.slow_tower_button;
-        private Rectangle entireScreen = new Rectangle(0, 0, PresentationController.STAGE_WIDTH, PresentationController.STAGE_HEIGHT);
-        private int pathWidth = 10,
-                    stageWidth = PresentationController.STAGE_WIDTH,
-                    stageHeight = PresentationController.STAGE_HEIGHT;
+        private int pathWidth = Logic.Constants.WalkPathWidth;
+        private Rectangle entireScreen = new Rectangle(0, 0, Logic.Constants.StageWidth, Logic.Constants.StageHeight);
+        private int stageHeight = Logic.Constants.StageHeight;
 
         public Background()
         {
@@ -58,21 +57,21 @@ namespace TowerShake.Presentation
             batch.Begin(SpriteSortMode.BackToFront, BlendState.NonPremultiplied);
 
             Color leftColor = active;
-            if (Logic.Player.Gold < Logic.Tower.ranged_tower_cost)
+            if (Logic.Player.Gold < Logic.Constants.RangedTowerCost)
             {
                 leftColor = inactive;
             }
             batch.Draw(leftButtonTexture, new Vector2(0, yPos), leftColor); // ranged tower
 
             Color midColor = active;
-            if (Logic.Player.Gold < Logic.Tower.melee_tower_cost)
+            if (Logic.Player.Gold < Logic.Constants.MeleeTowerCost)
             {
                 midColor = inactive;
             }
             batch.Draw(midButtonTexture, new Vector2(leftButtonTexture.Width, stageHeight - midButtonTexture.Height + 2), midColor); // melee tower
 
             Color rightColor = active;
-            if (Logic.Player.Gold < Logic.Tower.slow_tower_cost)
+            if (Logic.Player.Gold < Logic.Constants.SlowTowerCost) 
             {
                 rightColor = inactive;
             }
@@ -83,7 +82,7 @@ namespace TowerShake.Presentation
 
         private void drawCity(SpriteBatch batch)
         {
-            int size = 65;
+            int size = Logic.Constants.CitySize;
             Rectangle lastPath = paths.ElementAt(paths.Count - 1);
             Vector2 cityPos = new Vector2(lastPath.X, lastPath.Y + lastPath.Height);
             city = new Rectangle((int)cityPos.X - (size / 2), (int)cityPos.Y - (size / 2), size, size);

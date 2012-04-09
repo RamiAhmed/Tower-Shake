@@ -9,11 +9,11 @@ namespace TowerShake.Logic
     {
         public SlowTower()
         {
-            this.Accuracy = 1f;
-            this.ReloadSpeed = 0.5f;
-            this.Cost = Tower.slow_tower_cost;
-            this.Damage = 5;
-            this.Range = 150;
+            this.Accuracy = Constants.SlowTowerAccuracy;
+            this.ReloadSpeed = Constants.SlowTowerSpeed;
+            this.Cost = Constants.SlowTowerCost;
+            this.Damage = Constants.SlowTowerDamage;
+            this.Range = Constants.SlowTowerRange;
             this.Texture = Presentation.PresentationController.slow_tower;
         }
     }

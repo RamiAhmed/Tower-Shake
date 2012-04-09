@@ -16,14 +16,11 @@ namespace TowerShake
     /// </summary>
     public class Game : Microsoft.Xna.Framework.Game
     {
-        // Protected variables
-        protected GraphicsDeviceManager graphicsManager;
-        protected SpriteBatch spriteBatch;
-
         // Private variables
+        private GraphicsDeviceManager graphicsManager;
+        private SpriteBatch spriteBatch;
         private Presentation.PresentationController presentationController;
         private Logic.LogicController logicController;
-        private float gameFPS = 40.0f;
 
         public Game()
         {
@@ -47,12 +44,12 @@ namespace TowerShake
 
             //this.IsMouseVisible = true;
             this.IsFixedTimeStep = true;
-            this.TargetElapsedTime = TimeSpan.FromSeconds(1.0f / gameFPS);
+            this.TargetElapsedTime = TimeSpan.FromSeconds(1.0f / Logic.Constants.FPS);
             graphicsManager.IsFullScreen = false;
-            graphicsManager.PreferredBackBufferWidth = Presentation.PresentationController.STAGE_WIDTH;
-            graphicsManager.PreferredBackBufferHeight = Presentation.PresentationController.STAGE_HEIGHT;
+            graphicsManager.PreferredBackBufferWidth = Logic.Constants.StageWidth;
+            graphicsManager.PreferredBackBufferHeight = Logic.Constants.StageHeight;
             graphicsManager.ApplyChanges();
-            Window.Title = "Tower Shake!";   
+            Window.Title = Logic.Constants.WindowTitle;   
 
             Console.WriteLine("Initializing");
             // TODO: Add your initialization logic here

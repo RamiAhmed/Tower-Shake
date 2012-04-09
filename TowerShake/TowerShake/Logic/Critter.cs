@@ -45,11 +45,11 @@ namespace TowerShake.Logic
 
         private void updateCritterState()
         {
-            if (level < 5)
+            if (level < Constants.CritterLevelLength)
             {
                 crittersLevel = CritterType.LowLevel;
             }
-            else if (level < 10)
+            else if (level < (Constants.CritterLevelLength * 2))
             {
                 crittersLevel = CritterType.MediumLevel;
             }
@@ -188,7 +188,7 @@ namespace TowerShake.Logic
         {
             if (this.Slowed != 0)
             {
-                if (LogicController.getCurrentSeconds() - this.Slowed > 3)
+                if (LogicController.getCurrentSeconds() - this.Slowed > Constants.SlowDuration)
                 {
                     this.Slowed = 0;
                     this.SlowDamage = 0f;
@@ -212,16 +212,16 @@ namespace TowerShake.Logic
             _critter.Width = _critter.Texture.Width;
             _critter.Height = _critter.Texture.Height;
 
-            _critter.HP += level / 4;
-            _critter.Speed += level / 20;
-            _critter.Points += level / 10;
-            _critter.Dexterity += level / 100;
+            _critter.HP += (int)(level * Constants.CritterLevelHpModifier);
+            _critter.Speed += level * Constants.CritterLevelSpeedModifier;
+            _critter.Points += (int)(level * Constants.CritterLevelPointsModifier);
+            _critter.Dexterity += level * Constants.CritterLevelDexterityModifier;
 
             _critter.Dead = false;
             _critter.Active = false;
             _critter.Slowed = 0;
 
-            if (Sprite.GetRandom() < 0.05)
+            if ((float)Sprite.GetRandom() < Constants.CritterUpgradeChance)
             {
                 _critter.upgradeCritter();
             }
@@ -280,10 +280,10 @@ namespace TowerShake.Logic
 
         private int calculateWaveSize()
         {
-            int waveSize = 10 + (level / 2);
-            if (waveSize > 25)
+            int waveSize = Constants.CritterDefaultLevelSize + (int)(level * Constants.CritterLevelSizeModifier);
+            if (waveSize > Constants.CritterLevelMaxSize)
             {
-                waveSize = 25;
+                waveSize = Constants.CritterLevelMaxSize;
             }
 
             return waveSize;

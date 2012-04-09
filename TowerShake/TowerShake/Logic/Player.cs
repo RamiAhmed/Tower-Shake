@@ -19,14 +19,15 @@ namespace TowerShake.Logic
     {
         // Public variables
 
-
-        // Private variables
-        private LogicController _logicClass;
-        private static int gold = 50,
-                           points = 0,
-                           lives = 10;
+        // Private static variables        
+        private static int gold = Constants.StartGold,
+                           lives = Constants.StartLives;
         private static Boolean gameEnded = false;
         private static PlayerAbility playerAbility;
+
+        // private variables
+        private LogicController _logicClass;
+        private int specialAbilityCost = Constants.SpecialAbilityCost;
         KeyboardState currentKey, previousKey = Keyboard.GetState();
 
         public Player(LogicController parentClass)
@@ -77,9 +78,9 @@ namespace TowerShake.Logic
         {
             if (ability != PlayerAbility.NULL)
             {
-                if (Player.Gold > 50)
+                if (Player.Gold > specialAbilityCost)
                 {
-                    Player.Gold -= 50;
+                    Player.Gold -= specialAbilityCost;
 
                     switch (ability)
                     {
@@ -129,8 +130,8 @@ namespace TowerShake.Logic
                 foreach (Critter critter in Critter.critters)
                 {
                     critter.Slowed = LogicController.getCurrentSeconds();
-                    critter.SlowDamage = 0.75f;
-                    critter.damageCritter(5);
+                    critter.SlowDamage = Constants.AbilitySlowAmount;
+                    critter.damageCritter(Constants.AbilitySlowDamage);
                 }
             }
         }
@@ -146,11 +147,12 @@ namespace TowerShake.Logic
                     {
                         tower.Boosted = LogicController.getCurrentSeconds();
 
-                        tower.Accuracy *= 2;
-                        tower.Damage *= 2;
-                        tower.ReloadSpeed /= 2;
-                        tower.Accuracy *= 2;
-                        tower.Range *= 2;
+                        float boostAmount = Constants.AbilityTowerBoost;
+                        tower.Accuracy *= boostAmount;
+                        tower.Damage *= (int)boostAmount;
+                        tower.ReloadSpeed /= boostAmount;
+                        tower.Accuracy *= boostAmount;
+                        tower.Range *= (int)boostAmount;
                     }
                 }
             }
@@ -174,12 +176,6 @@ namespace TowerShake.Logic
                     GameEnd = true;
                 }
             }
-        }
-
-        public static int Points
-        {
-            get { return points; }
-            set { points = value; }
         }
 
         public static Boolean GameEnd

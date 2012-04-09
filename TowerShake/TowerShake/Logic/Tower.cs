@@ -21,13 +21,8 @@ namespace TowerShake.Logic
     class Tower : Sprite
     {
         // Public variables
-        public static int towerWidth = 15;
         public static List<Tower> towers = new List<Tower>();
         public static Boolean placingTower = false;
-        public static int melee_tower_cost = 25,
-                          ranged_tower_cost = 20,
-                          slow_tower_cost = 30;
-        // Protected variables
 
         // Private variables
         private LogicController _logic;
@@ -44,8 +39,8 @@ namespace TowerShake.Logic
         private AttackState _attackState;
         private TowerType _towerType;
 
-        private int stageWidth = Presentation.PresentationController.STAGE_WIDTH;
-        private int stageHeight = Presentation.PresentationController.STAGE_HEIGHT;
+        private int stageWidth = Constants.StageWidth,
+                    stageHeight = Constants.StageHeight;
 
         public Tower(LogicController parentClass)
         {
@@ -118,15 +113,16 @@ namespace TowerShake.Logic
         {
             if (this.Boosted != 0)
             {
-                if (LogicController.getCurrentSeconds() - this.Boosted > 5)
+                if (LogicController.getCurrentSeconds() - this.Boosted > Constants.TowerBoostDuration)
                 {
                     this.Boosted = 0;
 
-                    this.Accuracy /= 2;
-                    this.Damage /= 2;
-                    this.ReloadSpeed *= 2;
-                    this.Accuracy /= 2;
-                    this.Range /= 2;
+                    float boostAmount = Constants.AbilityTowerBoost;
+                    this.Accuracy /= boostAmount;
+                    this.Damage /= (int)boostAmount;
+                    this.ReloadSpeed *= boostAmount;
+                    this.Accuracy /= boostAmount;
+                    this.Range /= (int)boostAmount;
                 }
             }
         }
@@ -195,8 +191,8 @@ namespace TowerShake.Logic
             Bullet bullet = new Bullet();
             bullet.Speed = speed;
 
-            bullet.Position = new Vector2(tower.Position.X + (tower.Texture.Width / 2), 
-                                          tower.Position.Y + (tower.Texture.Height / 2));
+            bullet.Position = new Vector2(tower.Position.X + (tower.Width / 2), 
+                                          tower.Position.Y + (tower.Height / 2));
 
             bullet.Direction = critter.Position - tower.Position;
             bullet.Direction.Normalize();
@@ -339,7 +335,7 @@ namespace TowerShake.Logic
 
         public void sell()
         {
-            int gold = this.Cost / 2;
+            int gold = (int)(this.Cost * Constants.TowerSaleModifier);
             Player.Gold += gold;
 
             towers.RemoveAt(towers.IndexOf(this));
@@ -349,7 +345,7 @@ namespace TowerShake.Logic
 
         public void upgrade()
         {
-            int cost = this.Cost / 3;
+            int cost = (int)(this.Cost * Constants.TowerUpgradeModifier);
             if (Player.Gold >= cost)
             {
                 Player.Gold -= cost;

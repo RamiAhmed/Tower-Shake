@@ -20,10 +20,10 @@ namespace TowerShake.Logic
         {
             this.CritterColor = Color.Red;
             this.SlowColor = Color.GhostWhite;
-            this.HP = 100;
-            this.Speed = 10.0f;
-            this.Dexterity = 0.9f;
-            this.Points = 6;
+            this.HP = Constants.HighLevelHP;
+            this.Speed = Constants.HighLevelSpeed;
+            this.Dexterity = Constants.HighLevelDexterity;
+            this.Points = Constants.HighLevelPoints;
         }
     }
 }

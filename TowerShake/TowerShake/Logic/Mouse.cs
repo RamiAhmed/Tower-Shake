@@ -22,8 +22,8 @@ namespace TowerShake.Logic
                            previousMouse;
         private Vector2 leftButton, midButton, rightButton;
         private Tower _currentTower;
-        private int _stageWidth = Presentation.PresentationController.STAGE_WIDTH,
-                    _stageHeight = Presentation.PresentationController.STAGE_HEIGHT;
+        private int _stageWidth = Constants.StageWidth,
+                    _stageHeight = Constants.StageHeight;
        // private LogicController _logicController;
 
         public Mouse()
@@ -71,8 +71,9 @@ namespace TowerShake.Logic
 
             this.Move(currentMouse.X, currentMouse.Y);
 
+            Rectangle mouseRect = new Rectangle((int)this.Position.X, (int)this.Position.Y, Constants.MouseWidth, Constants.MouseHeight);
             batch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
-            batch.Draw(this.Texture, new Rectangle((int)this.Position.X, (int)this.Position.Y, 35, 20), Color.Black);
+            batch.Draw(this.Texture, mouseRect, Color.Black);
             batch.End();
 
             updateCurrentTower();
@@ -90,7 +91,7 @@ namespace TowerShake.Logic
         private void mouseLeftButton()
         {
             Console.WriteLine("Left mouse button clicked");
-            int sensitivity = 125;
+            int sensitivity = Constants.TowerButtonSensitivity;
 
             if (Tower.placingTower && this.CurrentTower != null)
             {

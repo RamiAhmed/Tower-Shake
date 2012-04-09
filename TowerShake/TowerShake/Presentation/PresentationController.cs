@@ -19,8 +19,6 @@ namespace TowerShake.Presentation
         public SpriteFont gameFont;
 
         // Public static variables
-        public static int STAGE_WIDTH = 800,
-                          STAGE_HEIGHT = 600;
         public static Texture2D mouse,
                                 critter_circle,
                                 ranged_tower,
@@ -35,6 +33,7 @@ namespace TowerShake.Presentation
                                 slow_tower_button;
 
         // Private variables
+        private List<Texture2D> loadedTextures = new List<Texture2D>();
         private Presentation.Background bg;
         private Game _gameClass; 
         private Vector2 gameClockVector,
@@ -60,7 +59,16 @@ namespace TowerShake.Presentation
 
         private Texture2D loadTexture2D(string assetName)
         {
-            return _gameClass.Content.Load<Texture2D>(assetName);
+            Texture2D tex =  _gameClass.Content.Load<Texture2D>(assetName);
+            if (tex != null)
+            {
+                loadedTextures.Add(tex);
+            }
+            else
+            {
+                Console.WriteLine("Error: Cannot load Texture2D by name: " + assetName);
+            }
+            return tex;
         }
 
         // Loads content at game start
@@ -117,22 +125,10 @@ namespace TowerShake.Presentation
         // Unloads content at game end
         protected override void UnloadContent()
         {
-            mouse.Dispose();
-            critter_circle.Dispose();
-
-            ranged_tower.Dispose();
-            slow_tower.Dispose();
-            melee_tower.Dispose();
-
-            ranged_tower_button.Dispose();
-            slow_tower_button.Dispose();
-            melee_tower_button.Dispose();
-
-            black_bullet.Dispose();
-
-            city.Dispose();
-            path_block.Dispose();
-            bgTexture.Dispose();
+            foreach (Texture2D texture in loadedTextures)
+            {
+                texture.Dispose();
+            }
         }
 
         private string getGameTime()

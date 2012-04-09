@@ -9,11 +9,11 @@ namespace TowerShake.Logic
     {
         public MeleeTower()
         {
-            this.Accuracy = 0.75f;
-            this.ReloadSpeed = 0.25f;
-            this.Cost = Tower.melee_tower_cost;
-            this.Damage = 5;
-            this.Range = 50;
+            this.Accuracy = Constants.MeleeTowerAccuracy;
+            this.ReloadSpeed = Constants.MeleeTowerSpeed;
+            this.Cost = Constants.MeleeTowerCost;
+            this.Damage = Constants.MeleeTowerDamage;
+            this.Range = Constants.MeleeTowerRange;
             this.Texture = Presentation.PresentationController.melee_tower;
         }
     }

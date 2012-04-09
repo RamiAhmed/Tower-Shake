@@ -15,13 +15,13 @@ namespace TowerShake.Logic
 {
     class Bullet : Sprite
     {
-        private int splashRange = 25;
+        private int splashRange = Constants.SlowTowerSplashRange;
         private Critter _target;
         private float _speed;
         private Boolean _done, _hit, _slow = false;
         private int _dmg;
         private Color _color;
-        private float bulletSpeedMultiplier = 1.5f;
+        private float bulletSpeedMultiplier = Constants.BulletSpeedMultiplier;
 
         public void Update(float delta, int stageWidth, int stageHeight) 
         {            
@@ -70,7 +70,7 @@ namespace TowerShake.Logic
 
         private void slow(Critter critter)
         {
-            float slowDamage = 0.2f; // 20 % slow
+            float slowDamage = Constants.SlowTowerSlowAmount; // 25 % slow (as defined in Constants)
 
             if (critter.SlowDamage < slowDamage)
             {

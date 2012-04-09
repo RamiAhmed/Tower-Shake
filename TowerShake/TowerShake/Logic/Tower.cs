@@ -152,7 +152,7 @@ namespace TowerShake.Logic
                         bullet.Update(delta, stageWidth, stageHeight);
 
                         batch.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend);
-                        batch.Draw(bullet.Texture, bullet.Position, Color.White);                            
+                        batch.Draw(bullet.Texture, bullet.Position, bullet.BulletColor);                            
                         batch.End();
                     }
 
@@ -203,12 +203,15 @@ namespace TowerShake.Logic
             Texture2D texture = null;
             switch (tower.Type)
             {
-                case TowerType.RangedTower: texture = Presentation.PresentationController.black_bullet; 
+                case TowerType.RangedTower: texture = Presentation.PresentationController.black_bullet;
+                                            bullet.BulletColor = Color.DarkGray;
                                             break;
-                case TowerType.MeleeTower: texture = Presentation.PresentationController.black_bullet; 
+                case TowerType.MeleeTower: texture = Presentation.PresentationController.black_bullet;
+                                           bullet.BulletColor = Color.DarkRed;
                                            break;
                 case TowerType.SlowTower: texture = Presentation.PresentationController.black_bullet; 
-                                          bullet.Slow = true; 
+                                          bullet.Slow = true;
+                                          bullet.BulletColor = Color.Cyan;
                                           break;
             }
             bullet.Texture = texture;

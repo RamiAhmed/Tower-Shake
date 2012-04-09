@@ -76,13 +76,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="graphics\black_bullet.png">
-      <Name>black_bullet</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="graphics\city.png">
       <Name>city</Name>
       <Importer>TextureImporter</Importer>
@@ -121,6 +114,13 @@
   <ItemGroup>
     <Compile Include="graphics\background4.png">
       <Name>background4</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="graphics\white_bullet.png">
+      <Name>white_bullet</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

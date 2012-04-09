@@ -20,13 +20,14 @@ namespace TowerShake.Logic
         private float _speed;
         private Boolean _done, _hit, _slow = false;
         private int _dmg;
-        private float _bulletSpeedMultiplier = 1.5f;
+        private Color _color;
+        private float bulletSpeedMultiplier = 1.5f;
 
         public void Update(float delta, int stageWidth, int stageHeight) 
         {            
             if (!bulletDone(stageWidth, stageHeight))
             {
-                this.Position += this.Direction * this.Speed * delta * _bulletSpeedMultiplier;            
+                this.Position += this.Direction * this.Speed * delta * bulletSpeedMultiplier;            
             }
 
         }
@@ -38,7 +39,7 @@ namespace TowerShake.Logic
                 _range = 30;
             if (Sprite.GetIsInRange(this.Position, this.Target.Position, _range) && this.Hit)
             {
-                this.Position = Vector2.Zero;
+                this.Position = new Vector2(-this.Texture.Width, -this.Texture.Height);//Vector2.Zero;
                 this.Done = true;
                 this.Target.damageCritter(this.Damage);
                 if (this.Slow)
@@ -59,7 +60,7 @@ namespace TowerShake.Logic
             }
             else if (((_posX < 0 || _posX > stageWidth) || (_posY < 0 || _posY > stageHeight)))
             {
-                this.Position = Vector2.Zero;
+                this.Position = new Vector2(-this.Texture.Width, -this.Texture.Height);//Vector2.Zero;
                 this.Done = true;
                 // Out of screen
             }
@@ -112,6 +113,12 @@ namespace TowerShake.Logic
         {
             get { return _slow; }
             set { _slow = value; }
+        }
+
+        public Color BulletColor
+        {
+            get { return _color; }
+            set { _color = value; }
         }
 
     }

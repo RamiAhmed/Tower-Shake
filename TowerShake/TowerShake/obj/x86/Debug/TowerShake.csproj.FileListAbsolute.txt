@@ -10,10 +10,10 @@ C:\Users\Rami Ahmed Bock\documents\visual studio 2010\Projects\TowerShake\TowerS
 C:\Users\Rami Ahmed Bock\documents\visual studio 2010\Projects\TowerShake\TowerShake\TowerShake\bin\x86\Debug\Content\graphics\ranged_tower.xnb
 C:\Users\Rami Ahmed Bock\documents\visual studio 2010\Projects\TowerShake\TowerShake\TowerShake\bin\x86\Debug\Content\graphics\slow_tower.xnb
 C:\Users\Rami Ahmed Bock\documents\visual studio 2010\Projects\TowerShake\TowerShake\TowerShake\bin\x86\Debug\Content\graphics\melee_tower.xnb
-C:\Users\Rami Ahmed Bock\documents\visual studio 2010\Projects\TowerShake\TowerShake\TowerShake\bin\x86\Debug\Content\graphics\black_bullet.xnb
 C:\Users\Rami Ahmed Bock\documents\visual studio 2010\Projects\TowerShake\TowerShake\TowerShake\bin\x86\Debug\Content\graphics\city.xnb
 C:\Users\Rami Ahmed Bock\documents\visual studio 2010\Projects\TowerShake\TowerShake\TowerShake\bin\x86\Debug\Content\graphics\path_block.xnb
 C:\Users\Rami Ahmed Bock\documents\visual studio 2010\Projects\TowerShake\TowerShake\TowerShake\bin\x86\Debug\Content\graphics\melee_tower_button.xnb
 C:\Users\Rami Ahmed Bock\documents\visual studio 2010\Projects\TowerShake\TowerShake\TowerShake\bin\x86\Debug\Content\graphics\ranged_tower_button.xnb
 C:\Users\Rami Ahmed Bock\documents\visual studio 2010\Projects\TowerShake\TowerShake\TowerShake\bin\x86\Debug\Content\graphics\slow_tower_button.xnb
 C:\Users\Rami Ahmed Bock\documents\visual studio 2010\Projects\TowerShake\TowerShake\TowerShake\bin\x86\Debug\Content\graphics\background4.xnb
+C:\Users\Rami Ahmed Bock\documents\visual studio 2010\Projects\TowerShake\TowerShake\TowerShake\bin\x86\Debug\Content\graphics\white_bullet.xnb

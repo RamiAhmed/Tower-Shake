@@ -72,7 +72,7 @@ namespace TowerShake.Logic
             this.Move(currentMouse.X, currentMouse.Y);
 
             batch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
-            batch.Draw(this.Texture, new Rectangle((int)this.Position.X, (int)this.Position.Y, 35, 20), Color.White);
+            batch.Draw(this.Texture, new Rectangle((int)this.Position.X, (int)this.Position.Y, 35, 20), Color.Black);
             batch.End();
 
             updateCurrentTower();
@@ -90,7 +90,7 @@ namespace TowerShake.Logic
         private void mouseLeftButton()
         {
             Console.WriteLine("Left mouse button clicked");
-            int sensitivity = 100;
+            int sensitivity = 125;
 
             if (Tower.placingTower && this.CurrentTower != null)
             {

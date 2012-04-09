@@ -81,7 +81,7 @@ namespace TowerShake.Presentation
             slow_tower_button = loadTexture2D("slow_tower_button");
             melee_tower_button = loadTexture2D("melee_tower_button");
 
-            black_bullet = loadTexture2D("black_bullet");
+            black_bullet = loadTexture2D("white_bullet");
 
             gameFont = _gameClass.Content.Load<SpriteFont>("GameFont");
 

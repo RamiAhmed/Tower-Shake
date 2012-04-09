@@ -3,7 +3,6 @@ Content\graphics\critter1.xnb
 Content\graphics\mouse.xnb
 Content\graphics\ranged_tower.xnb
 Content\graphics\slow_tower.xnb
-Content\graphics\black_bullet.xnb
 Content\graphics\city.xnb
 Content\graphics\melee_tower.xnb
 Content\graphics\path_block.xnb
@@ -11,3 +10,4 @@ Content\graphics\melee_tower_button.xnb
 Content\graphics\ranged_tower_button.xnb
 Content\graphics\slow_tower_button.xnb
 Content\graphics\background4.xnb
+Content\graphics\white_bullet.xnb

@@ -30,7 +30,8 @@ namespace TowerShake.Presentation
                                 bgTexture,
                                 melee_tower_button,
                                 ranged_tower_button,
-                                slow_tower_button;
+                                slow_tower_button,
+                                shake_menu;
 
         // Private variables
         private List<Texture2D> loadedTextures = new List<Texture2D>();
@@ -74,6 +75,8 @@ namespace TowerShake.Presentation
         // Loads content at game start
         protected override void LoadContent()
         {
+            shake_menu = loadTexture2D("shake_menu");
+
             bgTexture = loadTexture2D("background4");
             path_block = loadTexture2D("path_block");
             city = loadTexture2D("city");
@@ -104,21 +107,42 @@ namespace TowerShake.Presentation
             // Get the current sprite batch
             SpriteBatch spriteBatch = (SpriteBatch)Game.Services.GetService(typeof(SpriteBatch));
 
-            bg.drawBackground(spriteBatch);
+            if (Logic.GameStateHandler.CurrentGameState == Logic.GameState.MENU)
+            {
+                spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
+                spriteBatch.Draw(shake_menu, new Rectangle(100, 100, 600, 400), Color.White);
+                spriteBatch.End();
+            }
+            else if (Logic.GameStateHandler.CurrentGameState == Logic.GameState.PAUSE)
+            {
+                string paused = "Game Paused";
+                int pauseWidth = (int)gameFont.MeasureString(paused).X,
+                    pauseHeight = (int)gameFont.MeasureString(paused).Y;
+                Vector2 pos = new Vector2((Logic.Constants.StageWidth / 2) - (pauseWidth / 2), (Logic.Constants.StageHeight / 2) - (pauseHeight) / 2);
+                spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
+                spriteBatch.DrawString(gameFont, paused, pos, Color.Black);
+                spriteBatch.End();                
+            }
+            else if (Logic.GameStateHandler.CurrentGameState == Logic.GameState.PLAY)
+            {
+                bg.drawBackground(spriteBatch);
 
-            int width = GraphicsDevice.Viewport.Width;
-            int height = GraphicsDevice.Viewport.Height;
-            int gold = Logic.Player.Gold;
-            int lives = Logic.Player.Lives;
+                int width = GraphicsDevice.Viewport.Width;
+                int height = GraphicsDevice.Viewport.Height;
+                int gold = Logic.Player.Gold;
+                int lives = Logic.Player.Lives;
 
-            spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
+                spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
 
-            spriteBatch.DrawString(gameFont, getGameTime(), gameClockVector, Color.Black);
-            spriteBatch.DrawString(gameFont, lives.ToString(), gameLivesVector, Color.Black);
-            spriteBatch.DrawString(gameFont, gold.ToString(), gameGoldVector, Color.Black);
+                spriteBatch.DrawString(gameFont, getGameTime(), gameClockVector, Color.Black);
+                spriteBatch.DrawString(gameFont, lives.ToString(), gameLivesVector, Color.Black);
+                spriteBatch.DrawString(gameFont, gold.ToString(), gameGoldVector, Color.Black);
 
-            spriteBatch.End();
-
+                spriteBatch.End();
+            }
+            else if (Logic.GameStateHandler.CurrentGameState == Logic.GameState.END)
+            {
+            }
             base.Draw(gameTime);
         }
 

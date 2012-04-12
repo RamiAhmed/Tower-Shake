@@ -49,7 +49,9 @@ namespace TowerShake
             graphicsManager.PreferredBackBufferWidth = Logic.Constants.StageWidth;
             graphicsManager.PreferredBackBufferHeight = Logic.Constants.StageHeight;
             graphicsManager.ApplyChanges();
-            Window.Title = Logic.Constants.WindowTitle;   
+            Window.Title = Logic.Constants.WindowTitle;
+
+            Logic.GameStateHandler.CurrentGameState = Logic.GameState.MENU;
 
             Console.WriteLine("Initializing");
             // TODO: Add your initialization logic here
@@ -65,6 +67,7 @@ namespace TowerShake
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             Services.AddService(typeof(SpriteBatch), spriteBatch);
+            //Services.AddService(typeof(GraphicsDevice), GraphicsDevice);
             // TODO: use this.Content to load your game content here
         }
 
@@ -85,8 +88,8 @@ namespace TowerShake
         protected override void Update(GameTime gameTime)
         {
             // Allows the game to exit
-            if (Keyboard.GetState().IsKeyDown(Keys.Escape))
-            {
+            if (Logic.Player.GameEnd)
+            {               
                 this.Exit();
             }
 
@@ -102,7 +105,10 @@ namespace TowerShake
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            //if (Logic.GameStateHandler.CurrentGameState != Logic.GameState.PAUSE)
+            //{
+                GraphicsDevice.Clear(Color.DarkGray);
+            //}
 
             // TODO: Add your drawing code here
 

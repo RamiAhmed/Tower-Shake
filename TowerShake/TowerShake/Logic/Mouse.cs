@@ -25,6 +25,9 @@ namespace TowerShake.Logic
         private int _stageWidth = Constants.StageWidth,
                     _stageHeight = Constants.StageHeight;
        // private LogicController _logicController;
+        private Rectangle startGameButton = new Rectangle(250, 200, 300, 50),
+                          chatGameButton = new Rectangle(250, 300, 300, 50),
+                          endGameButton = new Rectangle(250, 400, 300, 50);
 
         public Mouse()
         {
@@ -64,6 +67,8 @@ namespace TowerShake.Logic
 
         public void drawMouse(SpriteBatch batch)
         {
+            currentMouse = Microsoft.Xna.Framework.Input.Mouse.GetState();
+
             if (this.Texture == null)
             {
                 this.Texture = Presentation.PresentationController.mouse;
@@ -90,54 +95,77 @@ namespace TowerShake.Logic
 
         private void mouseLeftButton()
         {
-            Console.WriteLine("Left mouse button clicked");
-            int sensitivity = Constants.TowerButtonSensitivity;
-
-            if (Tower.placingTower && this.CurrentTower != null)
+            if (GameStateHandler.CurrentGameState == GameState.MENU)
             {
-                float yPos = _stageHeight - ((float)(Presentation.PresentationController.melee_tower_button.Height) * 1.5f);
-                if (this.Position.Y < yPos)
+                Rectangle mouseBox = new Rectangle((int)this.Position.X, (int)this.Position.Y, 1, 1);
+
+                if (mouseBox.Intersects(startGameButton))
                 {
-                    if (Tower.build(this.CurrentTower, this.Position))
-                    { // if tower was successfully built
-                        this.CurrentTower = null;
+                    Console.WriteLine("Start game pressed!");
+                    GameStateHandler.CurrentGameState = GameState.PLAY;
+                }
+                else if (mouseBox.Intersects(chatGameButton))
+                {
+                    Console.WriteLine("Chat pressed!");
+                    // Start chat
+                }
+                else if (mouseBox.Intersects(endGameButton))
+                {
+                    Console.WriteLine("End game pressed!");
+                    Player.endGame();
+                } 
+            }
+            else if (GameStateHandler.CurrentGameState == GameState.PLAY)
+            {
+                Console.WriteLine("Left mouse button clicked");
+                int sensitivity = Constants.TowerButtonSensitivity;
+
+                if (Tower.placingTower && this.CurrentTower != null)
+                {
+                    float yPos = _stageHeight - ((float)(Presentation.PresentationController.melee_tower_button.Height) * 1.5f);
+                    if (this.Position.Y < yPos)
+                    {
+                        if (Tower.build(this.CurrentTower, this.Position))
+                        { // if tower was successfully built
+                            this.CurrentTower = null;
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("Error: Cannot place towers on button area");
                     }
                 }
                 else
                 {
-                    Console.WriteLine("Error: Cannot place towers on button area");
+                    Tower tower = Tower.getTowerAtPosition(this.Position);
+                    if (tower != null)
+                    {
+                        tower.upgrade();
+                    }
+
+                    if (Sprite.GetIsInRange(this.Position, leftButton, sensitivity))
+                    {
+                        // left button clicked
+                        Console.WriteLine("Ranged Tower button clicked");
+                        this.CurrentTower = Tower.buy(TowerType.RangedTower);
+                    }
+
+                    else if (Sprite.GetIsInRange(this.Position, midButton, sensitivity))
+                    {
+                        // mid button clicked
+                        Console.WriteLine("Melee Tower button clicked");
+                        this.CurrentTower = Tower.buy(TowerType.MeleeTower);
+                    }
+
+                    else if (Sprite.GetIsInRange(this.Position, rightButton, sensitivity))
+                    {
+                        // right button clicked
+                        Console.WriteLine("Slow Tower button clicked");
+                        this.CurrentTower = Tower.buy(TowerType.SlowTower);
+                    }
                 }
+                Console.WriteLine("Mouse : " + this.Position.ToString());
             }
-            else
-            {
-                Tower tower = Tower.getTowerAtPosition(this.Position);
-                if (tower != null)
-                {
-                    tower.upgrade();
-                }
-
-                if (Sprite.GetIsInRange(this.Position, leftButton, sensitivity))
-                {
-                    // left button clicked
-                    Console.WriteLine("Ranged Tower button clicked");
-                    this.CurrentTower = Tower.buy(TowerType.RangedTower);
-                }
-
-                else if (Sprite.GetIsInRange(this.Position, midButton, sensitivity))
-                {
-                    // mid button clicked
-                    Console.WriteLine("Melee Tower button clicked");
-                    this.CurrentTower = Tower.buy(TowerType.MeleeTower);
-                }
-
-                else if (Sprite.GetIsInRange(this.Position, rightButton, sensitivity))
-                {
-                    // right button clicked
-                    Console.WriteLine("Slow Tower button clicked");
-                    this.CurrentTower = Tower.buy(TowerType.SlowTower);
-                }
-            } 
-            Console.WriteLine("Mouse : " + this.Position.ToString());
         }
 
         private void mouseRightButton()

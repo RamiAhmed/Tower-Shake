@@ -11,3 +11,4 @@ Content\graphics\ranged_tower_button.xnb
 Content\graphics\slow_tower_button.xnb
 Content\graphics\background4.xnb
 Content\graphics\white_bullet.xnb
+Content\graphics\shake_menu.xnb

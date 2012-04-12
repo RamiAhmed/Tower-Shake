@@ -25,7 +25,8 @@ namespace TowerShake.Logic
         private Player _player;
         private Critter _critter;
         private Tower _tower;
-        private Logic.Mouse _mouse;        
+        private Logic.Mouse _mouse;
+        private KeyboardHandler _keyboard;
         private Game _game;
 
         public LogicController(Game game) 
@@ -39,22 +40,33 @@ namespace TowerShake.Logic
 
         private void init()
         {
+            _mouse = new Logic.Mouse();
+            _keyboard = new KeyboardHandler();
+
             _player = new Player(this);
             _critter = new Critter(this);
-            _mouse = new Logic.Mouse();
             _tower = new Tower(this);
         }
 
         // Updates every 1/40th second
         public override void Update(GameTime gameTime)
-        { 
-            updateGameClock(gameTime);
-            _mouse.mouseHandler();
-            _player.keyboardHandler();
-
-            if (Player.GameEnd)
+        {
+            if (Logic.GameStateHandler.CurrentGameState == Logic.GameState.MENU)
             {
-                _game.Exit();
+                _mouse.mouseHandler();
+            }
+            else if (Logic.GameStateHandler.CurrentGameState == Logic.GameState.PAUSE)
+            {
+                _keyboard.keyboardHandler();
+            }
+            else if (GameStateHandler.CurrentGameState == GameState.PLAY)
+            {
+                updateGameClock(gameTime);
+                _mouse.mouseHandler();
+                _keyboard.keyboardHandler();
+            }
+            else if (GameStateHandler.CurrentGameState == GameState.END)
+            {
             }
 
             base.Update(gameTime);
@@ -65,9 +77,23 @@ namespace TowerShake.Logic
         {
             SpriteBatch spriteBatch = (SpriteBatch)Game.Services.GetService(typeof(SpriteBatch));
 
-            _tower.updateTowers(spriteBatch, gameTime);
-            _critter.updateCritters(spriteBatch);
-            _mouse.drawMouse(spriteBatch);
+            if (GameStateHandler.CurrentGameState == GameState.MENU)
+            {
+                _mouse.drawMouse(spriteBatch);
+            }
+            else if (GameStateHandler.CurrentGameState == GameState.PAUSE)
+            {
+                _mouse.drawMouse(spriteBatch);
+            }
+            else if (GameStateHandler.CurrentGameState == GameState.PLAY)
+            {
+                _tower.updateTowers(spriteBatch, gameTime);
+                _critter.updateCritters(spriteBatch);
+                _mouse.drawMouse(spriteBatch);
+            }
+            else if (GameStateHandler.CurrentGameState == GameState.END)
+            {
+            }
 
             base.Draw(gameTime);
         }

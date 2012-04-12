@@ -21,7 +21,9 @@ namespace TowerShake.Logic
         private Boolean _done, _hit, _slow = false;
         private int _dmg;
         private Color _color;
+        private Vector2 _dir;
         private float bulletSpeedMultiplier = Constants.BulletSpeedMultiplier;
+        
 
         public void Update(float delta, int stageWidth, int stageHeight) 
         {            
@@ -119,6 +121,12 @@ namespace TowerShake.Logic
         {
             get { return _color; }
             set { _color = value; }
+        }
+
+        public Vector2 Direction
+        {
+            set { _dir = value; }
+            get { return _dir; }
         }
 
     }

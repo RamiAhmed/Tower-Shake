@@ -118,6 +118,15 @@
       <Output>C:\Users\Rami Ahmed Bock\documents\visual studio 2010\Projects\TowerShake\TowerShake\TowerShake\bin\x86\Debug\Content\graphics\white_bullet.xnb</Output>
       <Time>2012-04-09T15:42:23.6662082+02:00</Time>
     </Item>
+    <Item>
+      <Source>graphics\shake_menu.png</Source>
+      <Name>graphics\shake_menu</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\Rami Ahmed Bock\documents\visual studio 2010\Projects\TowerShake\TowerShake\TowerShake\bin\x86\Debug\Content\graphics\shake_menu.xnb</Output>
+      <Time>2012-04-12T14:29:12.5730775+02:00</Time>
+    </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>
       <TargetPlatform>Windows</TargetPlatform>

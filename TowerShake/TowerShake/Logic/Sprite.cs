@@ -18,14 +18,17 @@ namespace TowerShake.Logic
         // Public variables
 
         // Private variables
-        private Vector2 _pos, _dir;
+        private Vector2 _pos;
         private Texture2D _texture;
         private static Random _rand;
         private float _width, _height;
 
         public Sprite()
         {
-            _rand = new Random();
+            if (_rand == null)
+            {
+                _rand = new Random();
+            }
         }
 
         public static int GetRandom(int min, int max)
@@ -99,12 +102,6 @@ namespace TowerShake.Logic
         {
             set { _pos = value; }
             get { return _pos; }
-        }
-
-        public Vector2 Direction
-        {
-            set { _dir = value; }
-            get { return _dir; }
         }
 
         public Texture2D Texture

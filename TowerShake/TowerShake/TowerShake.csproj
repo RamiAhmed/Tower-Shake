@@ -113,7 +113,9 @@
     <Compile Include="Logic\Bullet.cs" />
     <Compile Include="Logic\Constants.cs" />
     <Compile Include="Logic\Critter.cs" />
+    <Compile Include="Logic\GameStateHandler.cs" />
     <Compile Include="Logic\HighLevel.cs" />
+    <Compile Include="Logic\KeyboardHandler.cs" />
     <Compile Include="Logic\LogicController.cs" />
     <Compile Include="Logic\LowLevel.cs" />
     <Compile Include="Logic\MediumLevel.cs" />

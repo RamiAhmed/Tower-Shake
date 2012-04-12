@@ -32,15 +32,15 @@ namespace TowerShake.Logic
         private static float TOWER_UPGRADE_MODIFIER = 0.35f;
 
         // Critter constants = { low level, medium level, high level }
-        private static float[] SPEED = { 1.5f, 2.5f, 5.0f};
-        private static int[] HP = { 15, 30, 60 };
+        private static float[] SPEED = { 1.5f, 2f, 4.0f};
+        private static int[] HP = { 15, 25, 50 };
         private static int[] POINTS = { 1, 3, 6 }; 
-        private static float[] DEXTERITY = { 0.25f, 0.5f, 0.75f };
+        private static float[] DEXTERITY = { 0.2f, 0.4f, 0.6f };
         private static int LEVEL_LENGTH = 5; // amount of waves per level
-        private static float UPGRADE_CHANCE = 0.05f;
+        private static float UPGRADE_CHANCE = 0.01f;
 
-        private static float CRITTER_LEVEL_HP_MOD = 0.25f;
-        private static float CRITTER_LEVEL_SPEED_MOD = 0.05f;
+        private static float CRITTER_LEVEL_HP_MOD = 0.2f;
+        private static float CRITTER_LEVEL_SPEED_MOD = 0.025f;
         private static float CRITTER_LEVEL_POINTS_MOD = 0.1f;
         private static float CRITTER_LEVEL_DEX_MOD = 0.01f;
 

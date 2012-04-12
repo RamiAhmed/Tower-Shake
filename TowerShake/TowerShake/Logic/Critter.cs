@@ -253,7 +253,7 @@ namespace TowerShake.Logic
                 //Console.WriteLine("Creating critter : " + i.ToString());
                 _critter = create();
 
-                yPos = _critter.Position.Y - ((_critter.Texture.Height + 5 + GetRandom(10)) * i);
+                yPos = _critter.Position.Y - ((_critter.Texture.Height + GetRandom(15)) * i);
                 _critter.Move(_critter.Position.X, yPos);
             }
         }

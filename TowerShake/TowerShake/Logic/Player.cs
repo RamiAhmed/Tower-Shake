@@ -23,12 +23,10 @@ namespace TowerShake.Logic
         private static int gold = Constants.StartGold,
                            lives = Constants.StartLives;
         private static Boolean gameEnded = false;
-        private static PlayerAbility playerAbility;
 
         // private variables
         private LogicController _logicClass;
-        private int specialAbilityCost = Constants.SpecialAbilityCost;
-        KeyboardState currentKey, previousKey = Keyboard.GetState();
+        private static int specialAbilityCost = Constants.SpecialAbilityCost;
 
         public Player(LogicController parentClass)
         {
@@ -44,41 +42,21 @@ namespace TowerShake.Logic
 
         }
 
-        public void keyboardHandler()
+        public static void endGame()
         {
-            currentKey = Keyboard.GetState();
-
-            if (currentKey.IsKeyDown(Keys.P) && previousKey.IsKeyUp(Keys.P))
+            if (!Player.GameEnd)
             {
-                playerAbility = PlayerAbility.PARALYZE;
+                Console.WriteLine("Shutting game down");
+                GameStateHandler.CurrentGameState = GameState.END;
+                Player.GameEnd = true;
             }
-            else if (currentKey.IsKeyDown(Keys.S) && previousKey.IsKeyUp(Keys.S))
-            {
-                playerAbility = PlayerAbility.SLOW;
-            }
-            else if (currentKey.IsKeyDown(Keys.K) && previousKey.IsKeyUp(Keys.K))
-            {
-                playerAbility = PlayerAbility.KILL;
-            }
-            else if (currentKey.IsKeyDown(Keys.B) && previousKey.IsKeyUp(Keys.B))
-            {
-                playerAbility = PlayerAbility.BOOST;
-            }
-            else
-            {
-                playerAbility = PlayerAbility.NULL;
-            }
-
-            specialAbility(playerAbility);                    
-
-            previousKey = currentKey;
         }
 
-        private void specialAbility(PlayerAbility ability)
+        public static void specialAbility(PlayerAbility ability)
         {
             if (ability != PlayerAbility.NULL)
             {
-                if (Player.Gold > specialAbilityCost)
+                if (Player.Gold >= specialAbilityCost)
                 {
                     Player.Gold -= specialAbilityCost;
 
@@ -97,7 +75,7 @@ namespace TowerShake.Logic
             }
         }
 
-        private void paralyze()
+        private static void paralyze()
         {
             Console.WriteLine("Special Ability: All critters paralyzed");
             if (Critter.critters.Count > 0)
@@ -110,7 +88,7 @@ namespace TowerShake.Logic
             }
         }
 
-        private void kill()
+        private static void kill()
         {
             Console.WriteLine("Special Ability: All critters killed");
             if (Critter.critters.Count > 0)
@@ -122,7 +100,7 @@ namespace TowerShake.Logic
             }
         }
 
-        private void slow()
+        private static void slow()
         {
             Console.WriteLine("Special Ability: All critters slowed");
             if (Critter.critters.Count > 0)
@@ -136,7 +114,7 @@ namespace TowerShake.Logic
             }
         }
 
-        private void boost()
+        private static void boost()
         {
             Console.WriteLine("Special Ability: All towers boosted");
             if (Tower.towers.Count > 0)

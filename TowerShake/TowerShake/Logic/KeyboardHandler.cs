@@ -29,7 +29,7 @@ namespace TowerShake.Logic
 
             if (currentKey.IsKeyDown(Keys.Escape) && previousKey.IsKeyUp(Keys.Escape))
             {
-                Player.endGame();
+                Player.EndGame();
             }
             else if (currentKey.IsKeyDown(Keys.Pause) && previousKey.IsKeyUp(Keys.Pause))
             {
@@ -67,7 +67,7 @@ namespace TowerShake.Logic
                     playerAbility = PlayerAbility.NULL;
                 }
 
-                Player.specialAbility(playerAbility);
+                Player.SpecialAbility(playerAbility);
             }
 
             previousKey = currentKey;

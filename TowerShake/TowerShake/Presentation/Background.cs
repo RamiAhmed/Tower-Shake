@@ -16,16 +16,17 @@ namespace TowerShake.Presentation
     class Background : Logic.Sprite
     {
         // Public variables
-        public static List<Rectangle> paths = new List<Rectangle>();
-        public static Rectangle city;
 
         // Private variables
-        private Texture2D bgTexture = PresentationController.bgTexture, 
-                          pathTexture = PresentationController.path_block,
-                          cityTexture = PresentationController.city,
-                          leftButtonTexture = PresentationController.ranged_tower_button,
-                          midButtonTexture = PresentationController.melee_tower_button,
-                          rightButtonTexture = PresentationController.slow_tower_button;
+        private static List<Rectangle> _pathsList = new List<Rectangle>();
+        private static Rectangle _city;
+
+        private Texture2D bgTexture = PresentationController.BackgroundTexture2D, 
+                          pathTexture = PresentationController.PathTexture2D,
+                          cityTexture = PresentationController.CityTexture2D,
+                          leftButtonTexture = PresentationController.RangedTowerButtonTexture2D,
+                          midButtonTexture = PresentationController.MeleeTowerButtonTexture2D,
+                          rightButtonTexture = PresentationController.SlowTowerButonTexture2D;
         private int pathWidth = Logic.Constants.WalkPathWidth;
         private Rectangle entireScreen = new Rectangle(0, 0, Logic.Constants.StageWidth, Logic.Constants.StageHeight);
         private int stageHeight = Logic.Constants.StageHeight;
@@ -35,7 +36,7 @@ namespace TowerShake.Presentation
             initWalkPath();
         }
 
-        public void drawBackground(SpriteBatch batch)
+        public void DrawBackground(SpriteBatch batch)
         {
             batch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
             batch.Draw(bgTexture, entireScreen, Color.White);
@@ -83,21 +84,21 @@ namespace TowerShake.Presentation
         private void drawCity(SpriteBatch batch)
         {
             int size = Logic.Constants.CitySize;
-            Rectangle lastPath = paths.ElementAt(paths.Count - 1);
+            Rectangle lastPath = PathsList.ElementAt(PathsList.Count - 1);
             Vector2 cityPos = new Vector2(lastPath.X, lastPath.Y + lastPath.Height);
-            city = new Rectangle((int)cityPos.X - (size / 2), (int)cityPos.Y - (size / 2), size, size);
+            City = new Rectangle((int)cityPos.X - (size / 2), (int)cityPos.Y - (size / 2), size, size);
 
             batch.Begin(SpriteSortMode.BackToFront, BlendState.NonPremultiplied);
-            batch.Draw(cityTexture, city, Color.White);
+            batch.Draw(cityTexture, City, Color.White);
             batch.End();
         }
 
         private void drawPaths(SpriteBatch batch)
         {
-            if (paths.Count > 0)
+            if (PathsList.Count > 0)
             {
                 batch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
-                foreach (Rectangle path in paths)
+                foreach (Rectangle path in PathsList)
                 {
                     batch.Draw(pathTexture, path, Color.White);
                    // Console.WriteLine("Drawing path" + paths.IndexOf(path).ToString() + ": " + path.ToString());
@@ -134,23 +135,23 @@ namespace TowerShake.Presentation
                 fifthPathHeight = 350;
 
             // First lane (leftmost) - vertical
-            paths.Add(new Rectangle(firstPathStartX, firstPathStartY, pathWidth, firstPathHeight));
+            PathsList.Add(new Rectangle(firstPathStartX, firstPathStartY, pathWidth, firstPathHeight));
             // Connector between first and second lane - horizontal
-            paths.Add(new Rectangle(secondPathStartX, secondPathStartY, secondPathWidth, pathWidth));
+            PathsList.Add(new Rectangle(secondPathStartX, secondPathStartY, secondPathWidth, pathWidth));
             // Second lane (middle) - vertical
-            paths.Add(new Rectangle(thirdPathStartX, thirdPathStartY, pathWidth, thirdPathHeight));
+            PathsList.Add(new Rectangle(thirdPathStartX, thirdPathStartY, pathWidth, thirdPathHeight));
             // Connector between second and third lane - horizontal
-            paths.Add(new Rectangle(fourthPathStartX, fourthPathStartY, fourthPathWidth, pathWidth));
+            PathsList.Add(new Rectangle(fourthPathStartX, fourthPathStartY, fourthPathWidth, pathWidth));
             // Third lane (rightmost) - vertical
-            paths.Add(new Rectangle(fifthPathStartX, fifthPathStartY, pathWidth, fifthPathHeight));
+            PathsList.Add(new Rectangle(fifthPathStartX, fifthPathStartY, pathWidth, fifthPathHeight));
 
         }
 
-        public static bool isOnWalkPath(Logic.Tower tower)
+        public static bool IsOnWalkPath(Logic.Tower tower)
         {
             bool onPath = false;
             Rectangle towerBox = new Rectangle((int)tower.Position.X, (int)tower.Position.Y, tower.Texture.Width, tower.Texture.Height);
-            foreach (Rectangle path in paths)
+            foreach (Rectangle path in PathsList)
             {
                 if (path.Intersects(towerBox))
                 {
@@ -162,11 +163,11 @@ namespace TowerShake.Presentation
             return onPath;
         }
 
-        public static bool isOnWalkPath(Logic.Critter critter)
+        public static bool IsOnWalkPath(Logic.Critter critter)
         {
             bool onWalkPath = false;
             Rectangle critterBox = new Rectangle((int)critter.Position.X, (int)critter.Position.Y, critter.Texture.Width, critter.Texture.Height);
-            foreach (Rectangle path in paths)
+            foreach (Rectangle path in PathsList)
             {
                 if (path.Intersects(critterBox))
                 {
@@ -178,11 +179,11 @@ namespace TowerShake.Presentation
             return onWalkPath;
         }
 
-        public static bool isOnCity(Logic.Critter critter)
+        public static bool IsOnCity(Logic.Critter critter)
         {
             bool onCity = false;
             Rectangle critterBox = new Rectangle((int)critter.Position.X, (int)critter.Position.Y, critter.Texture.Width, critter.Texture.Height);
-            if (city.Intersects(critterBox))
+            if (City.Intersects(critterBox))
             {
                 onCity = true;
             }
@@ -190,18 +191,30 @@ namespace TowerShake.Presentation
             return onCity;
         }
 
-        public static bool isOnCity(Logic.Tower tower)
+        public static bool IsOnCity(Logic.Tower tower)
         {
             bool onCity = false;
             Rectangle towerBox = new Rectangle((int)tower.Position.X, (int)tower.Position.Y, tower.Texture.Width, tower.Texture.Height);
-            if (city.Intersects(towerBox))
+            if (City.Intersects(towerBox))
             {
                 onCity = true;
             }
 
             return onCity;
         }
-                
+
+        public static List<Rectangle> PathsList
+        {
+            set { _pathsList = value; }
+            get { return _pathsList; }
+        }
+
+        public static Rectangle City
+        {
+            set { _city = value; }
+            get { return _city; }
+        }
+
 
     }
 }

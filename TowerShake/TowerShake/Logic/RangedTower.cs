@@ -14,7 +14,7 @@ namespace TowerShake.Logic
             this.Cost = Constants.RangedTowerCost;
             this.Damage = Constants.RangedTowerDamage;
             this.Range = Constants.RangedTowerRange;
-            this.Texture = Presentation.PresentationController.ranged_tower;
+            this.Texture = Presentation.PresentationController.RangedTowerTexture2D;
         }
     }
 }

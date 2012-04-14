@@ -14,7 +14,7 @@ namespace TowerShake.Logic
             this.Cost = Constants.MeleeTowerCost;
             this.Damage = Constants.MeleeTowerDamage;
             this.Range = Constants.MeleeTowerRange;
-            this.Texture = Presentation.PresentationController.melee_tower;
+            this.Texture = Presentation.PresentationController.MeleeTowerTexture2D;
         }
     }
 }

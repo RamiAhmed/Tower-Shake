@@ -20,63 +20,14 @@ namespace TowerShake.Logic
         // Private variables
         private Vector2 _pos;
         private Texture2D _texture;
-        private static Random _rand;
         private float _width, _height;
 
         public Sprite()
         {
-            if (_rand == null)
-            {
-                _rand = new Random();
-            }
+
         }
 
-        public static int GetRandom(int min, int max)
-        {
-            if (max > min)
-            {
-                return _rand.Next(min, max);
-            }
-            else
-            {
-                return 0;
-            }
-        }
-
-        public static int GetRandom(int max)
-        {
-            if (max > 0)
-            {
-                return _rand.Next(max);
-            }
-            else
-            {
-                return 0;
-            }
-        }
-
-        public static double GetRandom(double min, double max)
-        {
-            if (max > min)
-            {
-                return (_rand.NextDouble() * (max - min)) + min;
-            }
-            else
-            {
-                return 0;
-            }
-        }
-
-        public static double GetRandom(double max)
-        {
-            return GetRandom(0, max);
-        }
-
-        public static double GetRandom()
-        {
-            return _rand.NextDouble();
-        }
-
+ 
         public static Boolean GetIsInRange(Vector2 one, Vector2 two, float range)
         {
             bool inRange = false;

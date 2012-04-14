@@ -19,24 +19,26 @@ namespace TowerShake.Logic
     class Critter : Sprite
     {
         // Public variables
-        public static List<Critter> critters = new List<Critter>();
-        public int level = 0;
 
         // Private variables
-        private LogicController _logicClass;
+        private static List<Critter> _crittersList = new List<Critter>();
+
         private int _hp, _points, _slowed;
         private float _dexterity, _speed, _slowDamage;
         private Color _color, _slowColor;
         private Boolean _dead, _active;
+
+        private LogicController logicClass;
         private CritterType crittersLevel;
-        private List<Rectangle> _paths = Presentation.Background.paths;
+        private List<Rectangle> paths = Presentation.Background.PathsList;
         private int critterStartX = 50,
-                    critterStartY = 0;
+                    critterStartY = 0,
+                    waveLevel = 0;
 
         public Critter(LogicController parentClass)
         {
-            _logicClass = parentClass;
-            Console.WriteLine("Critter instantiated!");
+            logicClass = parentClass;
+            //Console.WriteLine("Critter instantiated!");
         }
 
         public Critter()
@@ -45,11 +47,11 @@ namespace TowerShake.Logic
 
         private void updateCritterState()
         {
-            if (level < Constants.CritterLevelLength)
+            if (waveLevel < Constants.CritterLevelLength)
             {
                 crittersLevel = CritterType.LowLevel;
             }
-            else if (level < (Constants.CritterLevelLength * 2))
+            else if (waveLevel < (Constants.CritterLevelLength * 2))
             {
                 crittersLevel = CritterType.MediumLevel;
             }
@@ -61,12 +63,12 @@ namespace TowerShake.Logic
 
         private void moveCritters()
         {
-            if (critters.Count > 0)
+            if (CrittersList.Count > 0)
             {
                 //Console.WriteLine("Move critter");
                 float speed, xPos, yPos;
                 Rectangle critterBox;
-                foreach (Critter critter in critters)
+                foreach (Critter critter in CrittersList)
                 {
                     xPos = critter.Position.X;
                     yPos = critter.Position.Y;
@@ -79,11 +81,11 @@ namespace TowerShake.Logic
                         speed *= 1f - critter.SlowDamage;
                     }
 
-                    if (Presentation.Background.isOnCity(critter))
+                    if (Presentation.Background.IsOnCity(critter))
                     {
                         // Critters have reached "The City" - Player lost a life
                         Player.Lives--;
-                        critter.die();
+                        critter.Die();
                         break;
                     }
 
@@ -95,33 +97,33 @@ namespace TowerShake.Logic
                             critter.Active = true;
                         }
                     }
-                    else if (!Presentation.Background.isOnWalkPath(critter))
+                    else if (!Presentation.Background.IsOnWalkPath(critter))
                     {
-                        string critterName = "critter" + critters.IndexOf(critter).ToString();
+                        string critterName = "critter" + CrittersList.IndexOf(critter).ToString();
                         Console.WriteLine("Error: " + critterName + " is outside path");
 
-                        critter.die();
+                        critter.Die();
                         break;
                     }
                     else
                     {
-                        if (_paths[4].Intersects(critterBox))
+                        if (paths[4].Intersects(critterBox))
                         {   // on fifth path (vertical)
                             critter.Move(xPos, yPos + speed);
                         }
-                        else if (_paths[3].Intersects(critterBox))
+                        else if (paths[3].Intersects(critterBox))
                         {   // on fourth path (horizontal)
                             critter.Move(xPos + speed, yPos);
                         }
-                        else if (_paths[2].Intersects(critterBox))
+                        else if (paths[2].Intersects(critterBox))
                         {   // on third path (vertical)
                             critter.Move(xPos, yPos - speed);
                         }
-                        else if (_paths[1].Intersects(critterBox))
+                        else if (paths[1].Intersects(critterBox))
                         {   // on second path (horizontal)
                             critter.Move(xPos + speed, yPos);
                         }
-                        else if (_paths[0].Intersects(critterBox))
+                        else if (paths[0].Intersects(critterBox))
                         {   // on first path (vertical)
                             critter.Move(xPos, yPos + speed);
                         }
@@ -130,16 +132,16 @@ namespace TowerShake.Logic
             }
         }
 
-        public void updateCritters(SpriteBatch batch)
+        public void UpdateCritters(SpriteBatch batch)
         {
             //Console.WriteLine("updateCritters");
-            if (critters.Count == 0)
+            if (CrittersList.Count == 0)
             {
-                if (_logicClass.getSecondsSinceLast() > 10)
+                if (logicClass.getSecondsSinceLast() > 10)
                 {
                     createWave();
                     updateCritterState();
-                    _logicClass.saveWaveTime();
+                    logicClass.saveWaveTime();
                 } 
             }
 
@@ -148,14 +150,14 @@ namespace TowerShake.Logic
 
         private void updateDrawWave(SpriteBatch batch)
         {
-            if (critters.Count > 0)
+            if (CrittersList.Count > 0)
             {
                 moveCritters();
 
-                int crittersLength = critters.Count;
+                int crittersLength = CrittersList.Count;
                 for (int i = 0; i < crittersLength; i++)
                 {
-                    Critter critter = critters.ElementAt(i);
+                    Critter critter = CrittersList.ElementAt(i);
                     if (!critter.Dead)
                     {
                         critter.checkForSlow();
@@ -174,7 +176,7 @@ namespace TowerShake.Logic
                     }
                     else
                     {
-                        critters.RemoveAt(critters.IndexOf(critter));
+                        CrittersList.RemoveAt(CrittersList.IndexOf(critter));
                         critter = null;
 
                         crittersLength--;
@@ -198,44 +200,44 @@ namespace TowerShake.Logic
 
         private Critter create()
         {
-            Critter _critter = null;
+            Critter critter = null;
             switch (crittersLevel)
             {
-                case CritterType.LowLevel: _critter = new LowLevel(); break;
-                case CritterType.MediumLevel: _critter = new MediumLevel(); break;
-                case CritterType.HighLevel: _critter = new HighLevel(); break;
+                case CritterType.LowLevel: critter = new LowLevel(); break;
+                case CritterType.MediumLevel: critter = new MediumLevel(); break;
+                case CritterType.HighLevel: critter = new HighLevel(); break;
             }
 
-            _critter.Move(critterStartX, critterStartY);
+            critter.Move(critterStartX, critterStartY);
 
-            _critter.Texture = Presentation.PresentationController.critter_circle;
-            _critter.Width = _critter.Texture.Width;
-            _critter.Height = _critter.Texture.Height;
+            critter.Texture = Presentation.PresentationController.CritterTexture2D;
+            critter.Width = critter.Texture.Width;
+            critter.Height = critter.Texture.Height;
 
-            _critter.HP += (int)(level * Constants.CritterLevelHpModifier);
-            _critter.Speed += level * Constants.CritterLevelSpeedModifier;
-            _critter.Points += (int)(level * Constants.CritterLevelPointsModifier);
-            _critter.Dexterity += level * Constants.CritterLevelDexterityModifier;
+            critter.HP += (int)(waveLevel * Constants.CritterLevelHpModifier);
+            critter.Speed += waveLevel * Constants.CritterLevelSpeedModifier;
+            critter.Points += (int)(waveLevel * Constants.CritterLevelPointsModifier);
+            critter.Dexterity += waveLevel * Constants.CritterLevelDexterityModifier;
 
-            _critter.Dead = false;
-            _critter.Active = false;
-            _critter.Slowed = 0;
+            critter.Dead = false;
+            critter.Active = false;
+            critter.Slowed = 0;
 
-            if ((float)Sprite.GetRandom() < Constants.CritterUpgradeChance)
+            if ((float)RandomHandler.GetRandom() < Constants.CritterUpgradeChance)
             {
-                _critter.upgradeCritter();
+                critter.upgradeCritter();
             }
 
-            critters.Add(_critter);
-            return _critter;
+            CrittersList.Add(critter);
+            return critter;
         }
 
         private void upgradeCritter()
         {
-            this.HP += level * 2;
+            this.HP += waveLevel * 2;
             this.Speed *= 0.95f;
             this.CritterColor = Color.Black;
-            this.Points += level / 6;
+            this.Points += waveLevel / 6;
             this.Dexterity *= 1.25f;
             this.Width *= 1.5f;
             this.Height *= 1.5f;
@@ -243,22 +245,22 @@ namespace TowerShake.Logic
 
         private void createWave()
         {
-            level++;
+            waveLevel++;
             int i = 0, 
-                _waveSize = calculateWaveSize();
+                waveSize = calculateWaveSize();
             float yPos = 0f;
-            Critter _critter = null;
-            for (i = 0; i < _waveSize; i++)
+            Critter critter = null;
+            for (i = 0; i < waveSize; i++)
             {
                 //Console.WriteLine("Creating critter : " + i.ToString());
-                _critter = create();
+                critter = create();
 
-                yPos = _critter.Position.Y - ((_critter.Texture.Height + GetRandom(15)) * i);
-                _critter.Move(_critter.Position.X, yPos);
+                yPos = critter.Position.Y - ((critter.Height + RandomHandler.GetRandom(15)) * i);
+                critter.Move(critter.Position.X, yPos);
             }
         }
 
-        public void damageCritter(int damage)
+        public void DamageCritter(int damage)
         {
             if (damage > 0)
             {
@@ -266,13 +268,13 @@ namespace TowerShake.Logic
                 //Console.WriteLine("critter " + this.ToString() + " receives " + damage.ToString() + " damage");
                 if (this.HP <= 0)
                 {
-                    this.die();
+                    this.Die();
                     Player.Gold += this.Points;
                 }
             }
         }
 
-        public void die()
+        public void Die()
         {
             //Console.WriteLine("killing critter: " + critter.ToString());
             this.Dead = true;
@@ -280,7 +282,7 @@ namespace TowerShake.Logic
 
         private int calculateWaveSize()
         {
-            int waveSize = Constants.CritterDefaultLevelSize + (int)(level * Constants.CritterLevelSizeModifier);
+            int waveSize = Constants.CritterDefaultLevelSize + (int)(waveLevel * Constants.CritterLevelSizeModifier);
             if (waveSize > Constants.CritterLevelMaxSize)
             {
                 waveSize = Constants.CritterLevelMaxSize;
@@ -347,6 +349,12 @@ namespace TowerShake.Logic
         {
             set { _slowColor = value; }
             get { return _slowColor; }
+        }
+
+        public static List<Critter> CrittersList
+        {
+            set { _crittersList = value; }
+            get { return _crittersList; }
         }
 
     }

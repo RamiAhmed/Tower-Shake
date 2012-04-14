@@ -122,6 +122,7 @@
     <Compile Include="Logic\MeleeTower.cs" />
     <Compile Include="Logic\Player.cs" />
     <Compile Include="Logic\Mouse.cs" />
+    <Compile Include="Logic\RandomHandler.cs" />
     <Compile Include="Logic\RangedTower.cs" />
     <Compile Include="Logic\SlowTower.cs" />
     <Compile Include="Logic\Sprite.cs" />

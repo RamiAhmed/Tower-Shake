@@ -16,23 +16,24 @@ namespace TowerShake.Logic
     public class LogicController : DrawableGameComponent
     {
         // Public variables
-        public static int totalGameTimeMinutes = 0;
-        public static int totalGameTimeSeconds = 0;
-        public static long timeMilliSeconds = 0;
-        public int lastWave = 0;
 
         // Private variables
-        private Player _player;
-        private Critter _critter;
-        private Tower _tower;
-        private Logic.Mouse _mouse;
-        private KeyboardHandler _keyboard;
-        private Game _game;
+        private static int _totalGameTimeMinutes = 0;
+        private static int _totalGameTimeSeconds = 0;
+        private static long _totalGameTimeMilliseconds = 0;
+        private static int _lastWave = 0;
+
+        private Player player;
+        private Critter critter;
+        private Tower tower;
+        private Logic.Mouse mouse;
+        private KeyboardHandler keyboard;
+        private Game game;
 
         public LogicController(Game game) 
                         : base(game)
         {
-            _game = game;
+            this.game = game;
             Console.WriteLine("LogicController instantiated");
 
             init();
@@ -40,12 +41,14 @@ namespace TowerShake.Logic
 
         private void init()
         {
-            _mouse = new Logic.Mouse();
-            _keyboard = new KeyboardHandler();
+            mouse = new Logic.Mouse();
+            keyboard = new KeyboardHandler();
 
-            _player = new Player(this);
-            _critter = new Critter(this);
-            _tower = new Tower(this);
+            player = new Player(this);
+            critter = new Critter(this);
+            tower = new Tower(this);
+
+            RandomHandler.Init();
         }
 
         // Updates every 1/40th second
@@ -53,17 +56,17 @@ namespace TowerShake.Logic
         {
             if (Logic.GameStateHandler.CurrentGameState == Logic.GameState.MENU)
             {
-                _mouse.mouseHandler();
+                mouse.mouseHandler();
             }
             else if (Logic.GameStateHandler.CurrentGameState == Logic.GameState.PAUSE)
             {
-                _keyboard.keyboardHandler();
+                keyboard.keyboardHandler();
             }
             else if (GameStateHandler.CurrentGameState == GameState.PLAY)
             {
                 updateGameClock(gameTime);
-                _mouse.mouseHandler();
-                _keyboard.keyboardHandler();
+                mouse.mouseHandler();
+                keyboard.keyboardHandler();
             }
             else if (GameStateHandler.CurrentGameState == GameState.END)
             {
@@ -79,17 +82,17 @@ namespace TowerShake.Logic
 
             if (GameStateHandler.CurrentGameState == GameState.MENU)
             {
-                _mouse.drawMouse(spriteBatch);
+                mouse.DrawMouse(spriteBatch);
             }
             else if (GameStateHandler.CurrentGameState == GameState.PAUSE)
             {
-                _mouse.drawMouse(spriteBatch);
+                mouse.DrawMouse(spriteBatch);
             }
             else if (GameStateHandler.CurrentGameState == GameState.PLAY)
             {
-                _tower.updateTowers(spriteBatch, gameTime);
-                _critter.updateCritters(spriteBatch);
-                _mouse.drawMouse(spriteBatch);
+                tower.UpdateTowers(spriteBatch, gameTime);
+                critter.UpdateCritters(spriteBatch);
+                mouse.DrawMouse(spriteBatch);
             }
             else if (GameStateHandler.CurrentGameState == GameState.END)
             {
@@ -100,19 +103,19 @@ namespace TowerShake.Logic
 
         private void updateGameClock(GameTime gameTime)
         {
-            timeMilliSeconds += (long)gameTime.ElapsedGameTime.TotalMilliseconds;
-            if (timeMilliSeconds >= 1000)
+            TotalGameTimeMilliseconds += (long)gameTime.ElapsedGameTime.TotalMilliseconds;
+            if (TotalGameTimeMilliseconds >= 1000)
             {
-                timeMilliSeconds = 0;
+                TotalGameTimeMilliseconds = 0;
 
-                totalGameTimeSeconds += 1;
+                TotalGameTimeSeconds += 1;
 
-                if (totalGameTimeSeconds >= 60)
+                if (TotalGameTimeSeconds >= 60)
                 {
-                    totalGameTimeSeconds = 0;
+                    TotalGameTimeSeconds = 0;
 
-                    totalGameTimeMinutes += 1;
-                    if (totalGameTimeMinutes >= 60)
+                    TotalGameTimeMinutes += 1;
+                    if (TotalGameTimeMinutes >= 60)
                     {
                         // if hours are implemented
                     }
@@ -122,17 +125,35 @@ namespace TowerShake.Logic
 
         public static int getCurrentSeconds()
         {
-            return (totalGameTimeMinutes * 60) + totalGameTimeSeconds;
+            return (TotalGameTimeMinutes * 60) + TotalGameTimeSeconds;
         }
 
         public int getSecondsSinceLast()
         {
-            return getCurrentSeconds() - lastWave;
+            return getCurrentSeconds() - _lastWave;
         }
 
         public void saveWaveTime()
         {
-            lastWave = getCurrentSeconds();
+            _lastWave = getCurrentSeconds();
+        }
+
+        public static int TotalGameTimeMinutes
+        {
+            get { return _totalGameTimeMinutes;}
+            set { _totalGameTimeMinutes = value; }
+        }
+
+        public static int TotalGameTimeSeconds
+        {
+            get { return _totalGameTimeSeconds; }
+            set { _totalGameTimeSeconds = value; }
+        }
+
+        public static long TotalGameTimeMilliseconds
+        {
+            get { return _totalGameTimeMilliseconds; }
+            set { _totalGameTimeMilliseconds = value; }
         }
     }
 }

@@ -14,7 +14,7 @@ namespace TowerShake.Logic
             this.Cost = Constants.SlowTowerCost;
             this.Damage = Constants.SlowTowerDamage;
             this.Range = Constants.SlowTowerRange;
-            this.Texture = Presentation.PresentationController.slow_tower;
+            this.Texture = Presentation.PresentationController.SlowTowerTexture2D;
         }
     }
 }

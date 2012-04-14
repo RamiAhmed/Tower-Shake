@@ -15,14 +15,15 @@ namespace TowerShake.Logic
 {
     class Bullet : Sprite
     {
-        private int splashRange = Constants.SlowTowerSplashRange;
         private Critter _target;
         private float _speed;
         private Boolean _done, _hit, _slow = false;
         private int _dmg;
         private Color _color;
         private Vector2 _dir;
+
         private float bulletSpeedMultiplier = Constants.BulletSpeedMultiplier;
+        private int splashRange = Constants.SlowTowerSplashRange;
         
 
         public void Update(float delta, int stageWidth, int stageHeight) 
@@ -36,33 +37,33 @@ namespace TowerShake.Logic
 
         private Boolean bulletDone(int stageWidth, int stageHeight)
         {
-            int _posX = (int)this.Position.X,
-                _posY = (int)this.Position.Y,
-                _range = 30;
-            if (Sprite.GetIsInRange(this.Position, this.Target.Position, _range) && this.Hit)
+            int posX = (int)this.Position.X,
+                posY = (int)this.Position.Y,
+                range = 30;
+            if (Sprite.GetIsInRange(this.Position, this.Target.Position, range) && this.Hit)
             {
-                this.Position = new Vector2(-this.Texture.Width, -this.Texture.Height);//Vector2.Zero;
+                this.Position = new Vector2(-this.Texture.Width, -this.Texture.Height);
                 this.Done = true;
-                this.Target.damageCritter(this.Damage);
+                this.Target.DamageCritter(this.Damage);
                 if (this.Slow)
                 {
                     slow(this.Target);
 
-                    foreach (Critter critter in Critter.critters)
+                    foreach (Critter critter in Critter.CrittersList)
                     {
                         if (Sprite.GetIsInRange(this.Target.Position, critter.Position, splashRange) &&
                             critter != this.Target)
                         {
-                            critter.damageCritter(this.Damage);
+                            critter.DamageCritter(this.Damage);
                             slow(critter);
                         }
                     }
                 }
                 // Damaged critter
             }
-            else if (((_posX < 0 || _posX > stageWidth) || (_posY < 0 || _posY > stageHeight)))
+            else if (((posX < 0 || posX > stageWidth) || (posY < 0 || posY > stageHeight)))
             {
-                this.Position = new Vector2(-this.Texture.Width, -this.Texture.Height);//Vector2.Zero;
+                this.Position = new Vector2(-this.Texture.Width, -this.Texture.Height);
                 this.Done = true;
                 // Out of screen
             }
@@ -72,7 +73,7 @@ namespace TowerShake.Logic
 
         private void slow(Critter critter)
         {
-            float slowDamage = Constants.SlowTowerSlowAmount; // 25 % slow (as defined in Constants)
+            float slowDamage = Constants.SlowTowerSlowAmount; 
 
             if (critter.SlowDamage < slowDamage)
             {

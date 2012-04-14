@@ -16,35 +16,35 @@ namespace TowerShake.Presentation
     public class PresentationController : DrawableGameComponent
     {
         // Public variables
-        public SpriteFont gameFont;
 
         // Public static variables
-        public static Texture2D mouse,
-                                critter_circle,
-                                ranged_tower,
-                                slow_tower,
-                                melee_tower,
-                                black_bullet,
-                                path_block,
-                                city,
-                                bgTexture,
-                                melee_tower_button,
-                                ranged_tower_button,
-                                slow_tower_button,
-                                shake_menu;
+        public static Texture2D MouseTexture2D,
+                                CritterTexture2D,
+                                RangedTowerTexture2D,
+                                SlowTowerTexture2D,
+                                MeleeTowerTexture2D,
+                                BulletTexture2D,
+                                PathTexture2D,
+                                CityTexture2D,
+                                BackgroundTexture2D,
+                                MeleeTowerButtonTexture2D,
+                                RangedTowerButtonTexture2D,
+                                SlowTowerButonTexture2D,
+                                MainMenuTexture2D;
 
         // Private variables
         private List<Texture2D> loadedTextures = new List<Texture2D>();
         private Presentation.Background bg;
-        private Game _gameClass; 
+        private Game game; 
         private Vector2 gameClockVector,
                         gameLivesVector,
                         gameGoldVector;
+        private SpriteFont gameFont;
 
         public PresentationController(Game game)
             : base(game)
         {
-            _gameClass = game;
+            this.game = game;
             Console.WriteLine("PresentationController instantiated");
 
             init();
@@ -60,7 +60,7 @@ namespace TowerShake.Presentation
 
         private Texture2D loadTexture2D(string assetName)
         {
-            Texture2D tex =  _gameClass.Content.Load<Texture2D>(assetName);
+            Texture2D tex =  game.Content.Load<Texture2D>(assetName);
             if (tex != null)
             {
                 loadedTextures.Add(tex);
@@ -75,26 +75,26 @@ namespace TowerShake.Presentation
         // Loads content at game start
         protected override void LoadContent()
         {
-            shake_menu = loadTexture2D("shake_menu");
+            MainMenuTexture2D = loadTexture2D("shake_menu");
 
-            bgTexture = loadTexture2D("background4");
-            path_block = loadTexture2D("path_block");
-            city = loadTexture2D("city");
+            BackgroundTexture2D = loadTexture2D("background4");
+            PathTexture2D = loadTexture2D("path_block");
+            CityTexture2D = loadTexture2D("city");
 
-            critter_circle = loadTexture2D("critter1");
-            mouse = loadTexture2D("mouse");
+            CritterTexture2D = loadTexture2D("critter1");
+            MouseTexture2D = loadTexture2D("mouse");
 
-            ranged_tower = loadTexture2D("ranged_tower");
-            slow_tower = loadTexture2D("slow_tower");
-            melee_tower = loadTexture2D("melee_tower");
+            RangedTowerTexture2D = loadTexture2D("ranged_tower");
+            SlowTowerTexture2D = loadTexture2D("slow_tower");
+            MeleeTowerTexture2D = loadTexture2D("melee_tower");
 
-            ranged_tower_button = loadTexture2D("ranged_tower_button");
-            slow_tower_button = loadTexture2D("slow_tower_button");
-            melee_tower_button = loadTexture2D("melee_tower_button");
+            RangedTowerButtonTexture2D = loadTexture2D("ranged_tower_button");
+            SlowTowerButonTexture2D = loadTexture2D("slow_tower_button");
+            MeleeTowerButtonTexture2D = loadTexture2D("melee_tower_button");
 
-            black_bullet = loadTexture2D("white_bullet");
+            BulletTexture2D = loadTexture2D("white_bullet");
 
-            gameFont = _gameClass.Content.Load<SpriteFont>("GameFont");
+            gameFont = game.Content.Load<SpriteFont>("GameFont");
 
             bg = new Presentation.Background();
 
@@ -110,7 +110,7 @@ namespace TowerShake.Presentation
             if (Logic.GameStateHandler.CurrentGameState == Logic.GameState.MENU)
             {
                 spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
-                spriteBatch.Draw(shake_menu, new Rectangle(100, 100, 600, 400), Color.White);
+                spriteBatch.Draw(MainMenuTexture2D, new Rectangle(100, 100, 600, 400), Color.White);
                 spriteBatch.End();
             }
             else if (Logic.GameStateHandler.CurrentGameState == Logic.GameState.PAUSE)
@@ -125,7 +125,7 @@ namespace TowerShake.Presentation
             }
             else if (Logic.GameStateHandler.CurrentGameState == Logic.GameState.PLAY)
             {
-                bg.drawBackground(spriteBatch);
+                bg.DrawBackground(spriteBatch);
 
                 int width = GraphicsDevice.Viewport.Width;
                 int height = GraphicsDevice.Viewport.Height;
@@ -159,8 +159,8 @@ namespace TowerShake.Presentation
         {
             string gameTime = "";
 
-            int _gameTimeSeconds = Logic.LogicController.totalGameTimeSeconds,
-                _gameTimeMinutes = Logic.LogicController.totalGameTimeMinutes;
+            int _gameTimeSeconds = Logic.LogicController.TotalGameTimeSeconds,
+                _gameTimeMinutes = Logic.LogicController.TotalGameTimeMinutes;
             string seconds = _gameTimeSeconds.ToString();
             if (_gameTimeSeconds < 10)
             {

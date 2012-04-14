@@ -105,10 +105,7 @@ namespace TowerShake
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            //if (Logic.GameStateHandler.CurrentGameState != Logic.GameState.PAUSE)
-            //{
-                GraphicsDevice.Clear(Color.DarkGray);
-            //}
+            GraphicsDevice.Clear(Color.Black);
 
             // TODO: Add your drawing code here
 

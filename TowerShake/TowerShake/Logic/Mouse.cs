@@ -21,9 +21,9 @@ namespace TowerShake.Logic
         private MouseState currentMouse,
                            previousMouse;
         private Vector2 leftButton, midButton, rightButton;
-        private Tower _currentTower;
-        private int _stageWidth = Constants.StageWidth,
-                    _stageHeight = Constants.StageHeight;
+        private Tower currentTower;
+        private int stageWidth = Constants.StageWidth,
+                    stageHeight = Constants.StageHeight;
        // private LogicController _logicController;
         private Rectangle startGameButton = new Rectangle(250, 200, 300, 50),
                           chatGameButton = new Rectangle(250, 300, 300, 50),
@@ -31,17 +31,15 @@ namespace TowerShake.Logic
 
         public Mouse()
         {
-           //_logicController = parentClass;
-
-            Console.WriteLine("Mouse instantiated");
+              Console.WriteLine("Mouse instantiated");
 
             init();
         }
 
         private void init()
         {
-            int yPos = _stageHeight,
-                xPos = (int)((float)_stageWidth * 0.33);
+            int yPos = stageHeight,
+                xPos = (int)((float)stageWidth * 0.33);
             leftButton = new Vector2((xPos / 2), yPos);
             midButton = new Vector2(xPos + (xPos / 2), yPos);
             rightButton = new Vector2((xPos * 2) + (xPos / 2), yPos);
@@ -65,13 +63,13 @@ namespace TowerShake.Logic
             previousMouse = currentMouse;
         }
 
-        public void drawMouse(SpriteBatch batch)
+        public void DrawMouse(SpriteBatch batch)
         {
             currentMouse = Microsoft.Xna.Framework.Input.Mouse.GetState();
 
             if (this.Texture == null)
             {
-                this.Texture = Presentation.PresentationController.mouse;
+                this.Texture = Presentation.PresentationController.MouseTexture2D;
             }
 
             this.Move(currentMouse.X, currentMouse.Y);
@@ -86,10 +84,10 @@ namespace TowerShake.Logic
 
         private void updateCurrentTower()
         {
-            Tower _tower = this.CurrentTower;
-            if (_tower != null)
+            Tower tower = this.CurrentTower;
+            if (tower != null)
             {
-                _tower.Position = this.Position;
+                tower.Position = this.Position;
             }
         }
 
@@ -112,7 +110,7 @@ namespace TowerShake.Logic
                 else if (mouseBox.Intersects(endGameButton))
                 {
                     Console.WriteLine("End game pressed!");
-                    Player.endGame();
+                    Player.EndGame();
                 } 
             }
             else if (GameStateHandler.CurrentGameState == GameState.PLAY)
@@ -120,12 +118,12 @@ namespace TowerShake.Logic
                 Console.WriteLine("Left mouse button clicked");
                 int sensitivity = Constants.TowerButtonSensitivity;
 
-                if (Tower.placingTower && this.CurrentTower != null)
+                if (Tower.PlacingTower && this.CurrentTower != null)
                 {
-                    float yPos = _stageHeight - ((float)(Presentation.PresentationController.melee_tower_button.Height) * 1.5f);
+                    float yPos = stageHeight - ((float)(Presentation.PresentationController.MeleeTowerButtonTexture2D.Height) * 1.5f);
                     if (this.Position.Y < yPos)
                     {
-                        if (Tower.build(this.CurrentTower, this.Position))
+                        if (Tower.BuildTower(this.CurrentTower, this.Position))
                         { // if tower was successfully built
                             this.CurrentTower = null;
                         }
@@ -137,31 +135,31 @@ namespace TowerShake.Logic
                 }
                 else
                 {
-                    Tower tower = Tower.getTowerAtPosition(this.Position);
+                    Tower tower = Tower.GetTowerAtPosition(this.Position);
                     if (tower != null)
                     {
-                        tower.upgrade();
+                        tower.UpgradeTower();
                     }
 
                     if (Sprite.GetIsInRange(this.Position, leftButton, sensitivity))
                     {
                         // left button clicked
                         Console.WriteLine("Ranged Tower button clicked");
-                        this.CurrentTower = Tower.buy(TowerType.RangedTower);
+                        this.CurrentTower = Tower.BuyTower(TowerType.RangedTower);
                     }
 
                     else if (Sprite.GetIsInRange(this.Position, midButton, sensitivity))
                     {
                         // mid button clicked
                         Console.WriteLine("Melee Tower button clicked");
-                        this.CurrentTower = Tower.buy(TowerType.MeleeTower);
+                        this.CurrentTower = Tower.BuyTower(TowerType.MeleeTower);
                     }
 
                     else if (Sprite.GetIsInRange(this.Position, rightButton, sensitivity))
                     {
                         // right button clicked
                         Console.WriteLine("Slow Tower button clicked");
-                        this.CurrentTower = Tower.buy(TowerType.SlowTower);
+                        this.CurrentTower = Tower.BuyTower(TowerType.SlowTower);
                     }
                 }
                 Console.WriteLine("Mouse : " + this.Position.ToString());
@@ -175,8 +173,8 @@ namespace TowerShake.Logic
 
             if (this.CurrentTower != null)
             {
-                Tower.towers.RemoveAt(Tower.towers.IndexOf(this.CurrentTower));
-                Tower.placingTower = false;
+                Tower.TowersList.RemoveAt(Tower.TowersList.IndexOf(this.CurrentTower));
+                Tower.PlacingTower = false;
    
                 this.CurrentTower = null;
 
@@ -184,18 +182,18 @@ namespace TowerShake.Logic
             }
             else
             {
-                Tower tower = Tower.getTowerAtPosition(this.Position);
+                Tower tower = Tower.GetTowerAtPosition(this.Position);
                 if (tower != null)
                 {
-                    tower.sell();
+                    tower.SellTower();
                 }
             }
         }
 
         public Tower CurrentTower
         {
-            set { _currentTower = value; }
-            get { return _currentTower; }
+            set { currentTower = value; }
+            get { return currentTower; }
         }
 
     }

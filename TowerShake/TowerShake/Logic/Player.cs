@@ -23,14 +23,14 @@ namespace TowerShake.Logic
         private static int gold = Constants.StartGold,
                            lives = Constants.StartLives;
         private static Boolean gameEnded = false;
+        private static int specialAbilityCost = Constants.SpecialAbilityCost;
 
         // private variables
-        private LogicController _logicClass;
-        private static int specialAbilityCost = Constants.SpecialAbilityCost;
+        private LogicController logicClass;
 
         public Player(LogicController parentClass)
         {
-            _logicClass = parentClass;
+            logicClass = parentClass;
 
             init();
 
@@ -42,7 +42,7 @@ namespace TowerShake.Logic
 
         }
 
-        public static void endGame()
+        public static void EndGame()
         {
             if (!Player.GameEnd)
             {
@@ -52,7 +52,7 @@ namespace TowerShake.Logic
             }
         }
 
-        public static void specialAbility(PlayerAbility ability)
+        public static void SpecialAbility(PlayerAbility ability)
         {
             if (ability != PlayerAbility.NULL)
             {
@@ -78,9 +78,9 @@ namespace TowerShake.Logic
         private static void paralyze()
         {
             Console.WriteLine("Special Ability: All critters paralyzed");
-            if (Critter.critters.Count > 0)
+            if (Critter.CrittersList.Count > 0)
             {
-                foreach (Critter critter in Critter.critters)
+                foreach (Critter critter in Critter.CrittersList)
                 {
                     critter.Slowed = LogicController.getCurrentSeconds();
                     critter.SlowDamage = 1f;
@@ -91,11 +91,11 @@ namespace TowerShake.Logic
         private static void kill()
         {
             Console.WriteLine("Special Ability: All critters killed");
-            if (Critter.critters.Count > 0)
+            if (Critter.CrittersList.Count > 0)
             {
-                foreach (Critter critter in Critter.critters)
+                foreach (Critter critter in Critter.CrittersList)
                 {
-                    critter.die();
+                    critter.Die();
                 }
             }
         }
@@ -103,13 +103,13 @@ namespace TowerShake.Logic
         private static void slow()
         {
             Console.WriteLine("Special Ability: All critters slowed");
-            if (Critter.critters.Count > 0)
+            if (Critter.CrittersList.Count > 0)
             {
-                foreach (Critter critter in Critter.critters)
+                foreach (Critter critter in Critter.CrittersList)
                 {
                     critter.Slowed = LogicController.getCurrentSeconds();
                     critter.SlowDamage = Constants.AbilitySlowAmount;
-                    critter.damageCritter(Constants.AbilitySlowDamage);
+                    critter.DamageCritter(Constants.AbilitySlowDamage);
                 }
             }
         }
@@ -117,9 +117,9 @@ namespace TowerShake.Logic
         private static void boost()
         {
             Console.WriteLine("Special Ability: All towers boosted");
-            if (Tower.towers.Count > 0)
+            if (Tower.TowersList.Count > 0)
             {
-                foreach (Tower tower in Tower.towers)
+                foreach (Tower tower in Tower.TowersList)
                 {
                     if (tower.Boosted == 0 && tower.TowerState == TowerState.Bought)
                     {

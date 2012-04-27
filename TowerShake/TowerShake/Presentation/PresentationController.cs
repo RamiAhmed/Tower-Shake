@@ -78,7 +78,7 @@ namespace TowerShake.Presentation
             MainMenuTexture2D = loadTexture2D("shake_menu");
 
             BackgroundTexture2D = loadTexture2D("background4");
-            PathTexture2D = loadTexture2D("path_block");
+            PathTexture2D = loadTexture2D("path_block2");
             CityTexture2D = loadTexture2D("city");
 
             CritterTexture2D = loadTexture2D("critter1");
@@ -121,22 +121,17 @@ namespace TowerShake.Presentation
                 Vector2 pos = new Vector2((Logic.Constants.StageWidth / 2) - (pauseWidth / 2), (Logic.Constants.StageHeight / 2) - (pauseHeight) / 2);
                 spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
                 spriteBatch.DrawString(gameFont, paused, pos, Color.Black);
-                spriteBatch.End();                
+                spriteBatch.End();          
             }
             else if (Logic.GameStateHandler.CurrentGameState == Logic.GameState.PLAY)
             {
                 bg.DrawBackground(spriteBatch);
 
-                int width = GraphicsDevice.Viewport.Width;
-                int height = GraphicsDevice.Viewport.Height;
-                int gold = Logic.Player.Gold;
-                int lives = Logic.Player.Lives;
-
                 spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
 
                 spriteBatch.DrawString(gameFont, getGameTime(), gameClockVector, Color.Black);
-                spriteBatch.DrawString(gameFont, lives.ToString(), gameLivesVector, Color.Black);
-                spriteBatch.DrawString(gameFont, gold.ToString(), gameGoldVector, Color.Black);
+                spriteBatch.DrawString(gameFont, Logic.Player.Lives.ToString(), gameLivesVector, Color.Black);
+                spriteBatch.DrawString(gameFont, Logic.Player.Gold.ToString(), gameGoldVector, Color.Black);
 
                 spriteBatch.End();
             }

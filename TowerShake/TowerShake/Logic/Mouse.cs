@@ -31,7 +31,7 @@ namespace TowerShake.Logic
 
         public Mouse()
         {
-              Console.WriteLine("Mouse instantiated");
+            Console.WriteLine("Mouse instantiated");
 
             init();
         }
@@ -121,7 +121,7 @@ namespace TowerShake.Logic
                 if (Tower.PlacingTower && this.CurrentTower != null)
                 {
                     float yPos = stageHeight - ((float)(Presentation.PresentationController.MeleeTowerButtonTexture2D.Height) * 1.5f);
-                    if (this.Position.Y < yPos)
+                    if (this.Position.Y < yPos && this.Position.Y > 60)
                     {
                         if (Tower.BuildTower(this.CurrentTower, this.Position))
                         { // if tower was successfully built
@@ -130,7 +130,7 @@ namespace TowerShake.Logic
                     }
                     else
                     {
-                        Console.WriteLine("Error: Cannot place towers on button area");
+                        Console.WriteLine("Error: Cannot place towers on button area or top area");
                     }
                 }
                 else
@@ -160,6 +160,13 @@ namespace TowerShake.Logic
                         // right button clicked
                         Console.WriteLine("Slow Tower button clicked");
                         this.CurrentTower = Tower.BuyTower(TowerType.SlowTower);
+                    }
+
+                    else if (Sprite.GetIsInRange(this.Position, new Vector2(40, 40), 30))
+                    {
+                        // exit button clicked
+                        Console.WriteLine("Exit button clicked");
+                        Player.GameEnd = true;
                     }
                 }
                 Console.WriteLine("Mouse : " + this.Position.ToString());

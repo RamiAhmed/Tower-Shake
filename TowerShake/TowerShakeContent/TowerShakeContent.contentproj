@@ -88,13 +88,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="graphics\path_block.png">
-      <Name>path_block</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="graphics\melee_tower_button.png">
       <Name>melee_tower_button</Name>
       <Importer>TextureImporter</Importer>
@@ -128,6 +121,13 @@
   <ItemGroup>
     <Compile Include="graphics\shake_menu.png">
       <Name>shake_menu</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="graphics\path_block2.png">
+      <Name>path_block2</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
